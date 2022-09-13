@@ -1,6 +1,8 @@
 package ObjectOrientedCourse.epager1;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class Account {
     private BigDecimal balance;
@@ -43,12 +45,22 @@ public class Account {
 
     @Override
     public String toString() {
-        return (getAccountNumber() + " " + getBalance() + " " +  getAccount() + " " + getInterest());
+        String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
+        NumberFormat percentFormat = NumberFormat.getPercentInstance(new Locale("sv","SE"));
+        BigDecimal finalInterest =  interest.multiply(balance);
+        percentFormat.setMaximumFractionDigits(1); // Anger att vi vill ha max 1 decimal
+        String percentStr = percentFormat.format( interest.doubleValue() );
+        return (accountNumber + " " + balanceStr + " " +  accountType + " " + percentStr);
     }
 
     public String closeAccStr() {
-        BigDecimal finalInterest =  getInterest().multiply(getBalance());
-        return (getAccountNumber() + " " + getBalance() + " " +  getAccount() + " " + finalInterest);
+        BigDecimal finalInterest =  interest.multiply(balance);
+        NumberFormat percentFormat = NumberFormat.getPercentInstance(new Locale("sv","SE"));
+        percentFormat.setMaximumFractionDigits(1); // Anger att vi vill ha max 1 decimal
+        String percentStr = percentFormat.format( finalInterest.intValue());
+        String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
+        String finalStr= NumberFormat.getCurrencyInstance().format(finalInterest);
+        return (accountNumber+ " " + balanceStr + " " +  accountType + " " + finalStr);
     }
 
 

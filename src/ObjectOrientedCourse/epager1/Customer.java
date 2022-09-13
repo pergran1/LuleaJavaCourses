@@ -82,7 +82,7 @@ public class Customer {
     // Must override the toString function in order to print the correct format
     @Override
     public String toString() {
-        return (getPersonalNumber() + " " + getFullName());
+        return (personalNumber + " " + getFullName());
     }
 
     public static void main(String[] args) {

@@ -157,8 +157,9 @@ public class BankLogic {
 
             ArrayList<Account> accountList = customer.getAccountList();
             for( int i = 0;  i < accountList.size(); i++){
-                deleteCustomerStr.add(accountList.get(i).toString()); // add string of the account
+                deleteCustomerStr.add(accountList.get(i).closeAccStr()); // add string of the account
                 customer.removeAccount(accountList.get(i).getAccountNumber()); //remove the account
+                i--;
             }
             customersList.remove(customer);
             return deleteCustomerStr;
