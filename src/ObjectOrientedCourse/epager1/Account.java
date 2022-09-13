@@ -11,14 +11,18 @@ public class Account {
 
     public Account() {
         nbrOfAccounts++;
-        this.balance = new BigDecimal("0");
+        this.balance = new BigDecimal("0.00");
         this.interest= new BigDecimal("0.012");
         this.accountNumber = nbrOfAccounts;
         this.accountType = "Sparkonto";
     }
 
+    public BigDecimal getBalance(){
+        return balance;
+    }
+
     public String getAccount(){
-        return this.accountType;
+        return accountType;
     }
 
     public int getAccountNumber(){
@@ -29,10 +33,26 @@ public class Account {
         return interest;
     }
 
+    public void deposit(int amount){
+        balance = balance.add(new BigDecimal(amount));
+    }
+
+    public void withdraw(int amount){
+        balance = balance.subtract(new BigDecimal(amount));
+    }
+
     @Override
     public String toString() {
-        return (getAccountNumber() + " " +  getAccount() + " " + getInterest());
+        return (getAccountNumber() + " " + getBalance() + " " +  getAccount() + " " + getInterest());
     }
+
+    public String closeAccStr() {
+        BigDecimal finalInterest =  getInterest().multiply(getBalance());
+        return (getAccountNumber() + " " + getBalance() + " " +  getAccount() + " " + finalInterest);
+    }
+
+
+
 
 
     public static void main(String[] args) {

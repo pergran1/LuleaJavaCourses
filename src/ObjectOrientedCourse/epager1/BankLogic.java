@@ -1,5 +1,6 @@
 package ObjectOrientedCourse.epager1;
 
+import java.math.BigDecimal;
 import java.security.cert.PolicyNode;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,8 @@ public class BankLogic {
         return null;
     }
 
+
+
     public boolean changeCustomerName(String name, String surname, String pNo){
         Customer customer = findCustomer(pNo);
         Boolean nameChange = name.isEmpty();
@@ -61,12 +64,64 @@ public class BankLogic {
         } else if (nameChange == false){
             customer.setName(name);
             return true;
-        }else if (surNameChange == false){
+        } else if (surNameChange == false){
             customer.setSurName(surname);
             return true;
         } else{
             return false;
         }
+    }
+
+    public int createSavingsAccount(String pNo){
+        Customer customer = findCustomer(pNo);
+        if ( customer != null){
+            int accountNbr =  customer.createAccount();
+            return accountNbr;
+
+        }
+        return -1;
+    }
+
+    public String getAccount(String pNo, int accountId){
+        Account foundAccount = findAccount(pNo, accountId);
+        if (foundAccount != null){
+            return foundAccount.toString();
+        }
+        return null;
+    }
+
+    public boolean deposit(String pNo, int accountId, int amount){
+        Account foundAccount = findAccount(pNo, accountId);
+        if (foundAccount != null && amount > 0){
+            foundAccount.deposit(amount);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean withdraw(String pNo, int accountId, int amount){
+        Account foundAccount = findAccount(pNo, accountId);
+        if (foundAccount != null && amount > 0){
+            int checkAmountLessBalance = foundAccount.getBalance().compareTo(BigDecimal.valueOf(amount));
+            if (checkAmountLessBalance >= 0){
+                foundAccount.withdraw(amount);
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public String closeAccount(String pNo, int accountId){
+        Customer foundCustomer = findCustomer(pNo);
+        if (foundCustomer != null) {
+
+            return foundCustomer.removeAccount(accountId);
+
+        }
+
+        return null;
+
     }
 
 
@@ -82,6 +137,36 @@ public class BankLogic {
             }
         }
         return foundCustomer;
+    }
+
+    private Account findAccount(String pNo, int accountId){
+        Customer customer = findCustomer(pNo);
+        if (customer != null) {
+            Account foundAccount = customer.findAccount(accountId);
+            return foundAccount;
+        }
+        return null;
+    }
+
+
+    public ArrayList<String> deleteCustomer( String pNo){
+        Customer customer = findCustomer(pNo);
+        if (customer != null) {
+            ArrayList<String> deleteCustomerStr = new ArrayList<String>();
+            deleteCustomerStr.add(customer.toString());
+
+            ArrayList<Account> accountList = customer.getAccountList();
+            for( int i = 0;  i < accountList.size(); i++){
+                deleteCustomerStr.add(accountList.get(i).toString()); // add string of the account
+                customer.removeAccount(accountList.get(i).getAccountNumber()); //remove the account
+            }
+            customersList.remove(customer);
+            return deleteCustomerStr;
+        }
+
+        return null;
+
+
     }
 
 
@@ -100,6 +185,18 @@ public class BankLogic {
         System.out.println(hoho.getCustomer("923"));
         hoho.changeCustomerName("Lars New", "hoho", "923");
         hoho.changeCustomerName("", "", "523");
+        hoho.createSavingsAccount("523");
+        hoho.createSavingsAccount("523");
+        System.out.println(hoho.getAllCustomers());
+        System.out.println(hoho.getCustomer("523"));
+        System.out.println(hoho.getAccount("523", 10902));
+        hoho.deposit("523", 1001, 1050);
+        System.out.println(hoho.getCustomer("523"));
+        hoho.withdraw("523", 1001, 50);
+        System.out.println(hoho.getCustomer("523"));
+        System.out.println(hoho.closeAccount("523", 1001));
+        System.out.println(hoho.getCustomer("523"));
+        System.out.println(hoho.deleteCustomer("523"));
         System.out.println(hoho.getAllCustomers());
         //hoho.findCustomer("523");
 

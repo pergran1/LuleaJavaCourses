@@ -53,6 +53,32 @@ public class Customer {
         surName = newSurName;
     }
 
+
+
+    // get the account based on a accountNbr
+    public Account findAccount(int accountNbr){
+        Account foundAccount = null;
+        for(Account account: accountList){
+            if(account.getAccountNumber() == accountNbr){
+                foundAccount = account;
+                break;
+            }
+        }
+        return foundAccount;
+    }
+
+
+    public String removeAccount(int accountNbr){
+        Account foundAccount = findAccount(accountNbr);
+        if (foundAccount != null){
+            String  closeAccount = foundAccount.closeAccStr();
+            accountList.remove(foundAccount);
+            return closeAccount;
+        }
+
+        return null;
+    }
+
     // Must override the toString function in order to print the correct format
     @Override
     public String toString() {
