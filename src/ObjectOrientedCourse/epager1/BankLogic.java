@@ -101,12 +101,8 @@ public class BankLogic {
 
     public boolean withdraw(String pNo, int accountId, int amount){
         Account foundAccount = findAccount(pNo, accountId);
-        if (foundAccount != null && amount > 0){
-            int checkAmountLessBalance = foundAccount.getBalance().compareTo(BigDecimal.valueOf(amount));
-            if (checkAmountLessBalance >= 0){
-                foundAccount.withdraw(amount);
-                return true;
-            }
+        if (foundAccount != null){
+            return foundAccount.withdraw(amount);
         }
         return false;
 
@@ -156,11 +152,11 @@ public class BankLogic {
             deleteCustomerStr.add(customer.toString());
 
             ArrayList<Account> accountList = customer.getAccountList();
-            for( int i = 0;  i < accountList.size(); i++){
-                deleteCustomerStr.add(accountList.get(i).closeAccStr()); // add string of the account
-                customer.removeAccount(accountList.get(i).getAccountNumber()); //remove the account
-                i--;
+
+            for (Account account: accountList){
+                deleteCustomerStr.add(account.closeAccStr());
             }
+            customer.removeAllAccounts();
             customersList.remove(customer);
             return deleteCustomerStr;
         }

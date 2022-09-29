@@ -39,8 +39,15 @@ public class Account {
         balance = balance.add(new BigDecimal(amount));
     }
 
-    public void withdraw(int amount){
-        balance = balance.subtract(new BigDecimal(amount));
+    public boolean withdraw(int amount){
+        int checkAmountLessBalance = balance.compareTo(BigDecimal.valueOf(amount));
+        if( amount > 0 && checkAmountLessBalance >= 0) {
+            balance = balance.subtract(new BigDecimal(amount));
+            return true;
+        }
+        return false;
+
+
     }
 
     @Override

@@ -71,12 +71,17 @@ public class Customer {
     public String removeAccount(int accountNbr){
         Account foundAccount = findAccount(accountNbr);
         if (foundAccount != null){
-            String  closeAccount = foundAccount.closeAccStr();
+            String closeAccount = foundAccount.closeAccStr();
             accountList.remove(foundAccount);
             return closeAccount;
         }
 
         return null;
+    }
+
+
+    public void removeAllAccounts(){
+        ArrayList<Account> accountList = new ArrayList<Account>();
     }
 
     // Must override the toString function in order to print the correct format
