@@ -25,8 +25,8 @@ public class BankLogic {
     public boolean createCustomer(String name, String surname, String pNo){
        // Customer account = customersList.stream().filter(a -> a.getPersonalNumber() == pNo).collect(Collectors.toList()).get(0);
         if (findCustomer(pNo) == null){
-            Customer testar = new Customer(name, surname, pNo);
-            customersList.add(testar);
+            Customer newCustomer = new Customer(name, surname, pNo);
+            customersList.add(newCustomer);
             return true;
         }
         return false;
