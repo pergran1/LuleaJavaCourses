@@ -55,21 +55,13 @@ public class BankLogic {
         Customer customer = findCustomer(pNo);
         Boolean nameChange = name.isEmpty();
         Boolean surNameChange = surname.isEmpty();
-        if (customer == null){
+        if( nameChange == true && surNameChange == true){
             return false;
-        } else if (nameChange == false && surNameChange == false){
-            customer.setName(name);
-            customer.setSurName(surname);
+        } else if (customer != null) {
+            customer.changeNames(name, surname);
             return true;
-        } else if (nameChange == false){
-            customer.setName(name);
-            return true;
-        } else if (surNameChange == false){
-            customer.setSurName(surname);
-            return true;
-        } else{
-            return false;
         }
+       return false;
     }
 
     public int createSavingsAccount(String pNo){

@@ -53,6 +53,12 @@ public class Customer {
         surName = newSurName;
     }
 
+    public void changeNames(String newName, String newSurName){
+        if(newName.isEmpty() == false) name = newName;
+        if (newSurName.isEmpty() == false) surName = newSurName;
+
+    }
+
 
 
     // get the account based on a accountNbr
