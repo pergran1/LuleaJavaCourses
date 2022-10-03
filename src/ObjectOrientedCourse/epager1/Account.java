@@ -1,3 +1,15 @@
+/**
+ * Denna klass representerar ett sparkonto
+ * Den innehåller variabler såsom pengar, ränta, kontonummer och typ av konto
+ * Men ska kunna hämta och ändra några variabler, bland annat ta ut eller sätta in pengar
+ *
+ * Metoder finns även för att få en bra utskrift av kontot
+ *
+ * @author Per Granberg, epager-1
+ */
+
+
+
 package ObjectOrientedCourse.epager1;
 
 import java.math.BigDecimal;
@@ -35,10 +47,18 @@ public class Account {
         return interest;
     }
 
+    /**
+     * Sätter in pengar på kontot
+     */
     public void deposit(int amount){
         balance = balance.add(new BigDecimal(amount));
     }
 
+    /**
+     * tar ut pengar från kontot
+     * @param int amount
+     * @return Boolean
+     */
     public boolean withdraw(int amount){
         int checkAmountLessBalance = balance.compareTo(BigDecimal.valueOf(amount));
         if( amount > 0 && checkAmountLessBalance >= 0) {
@@ -50,41 +70,30 @@ public class Account {
 
     }
 
+
+    /**
+     * Skapar en sträng för att visa information om kontot
+     */
     @Override
     public String toString() {
         String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
         NumberFormat percentFormat = NumberFormat.getPercentInstance(new Locale("sv","SE"));
-        BigDecimal finalInterest =  interest.multiply(balance);
         percentFormat.setMaximumFractionDigits(1); // Anger att vi vill ha max 1 decimal
         String percentStr = percentFormat.format( interest.doubleValue() );
         return (accountNumber + " " + balanceStr + " " +  accountType + " " + percentStr);
     }
 
+    /**
+     * Skapar en sträng för att skriva ut konto information när man stänger ett konto
+     */
     public String closeAccStr() {
         BigDecimal finalInterest =  interest.multiply(balance);
         NumberFormat percentFormat = NumberFormat.getPercentInstance(new Locale("sv","SE"));
-        percentFormat.setMaximumFractionDigits(1); // Anger att vi vill ha max 1 decimal
-        String percentStr = percentFormat.format( finalInterest.intValue());
+        percentFormat.setMaximumFractionDigits(1);
         String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
         String finalStr= NumberFormat.getCurrencyInstance().format(finalInterest);
         return (accountNumber+ " " + balanceStr + " " +  accountType + " " + finalStr);
     }
 
-
-
-
-
-    public static void main(String[] args) {
-        Account testar = new Account();
-        Account testar2 = new Account();
-
-        System.out.println(testar.getAccount());
-        System.out.println(testar.getAccountNumber());
-        System.out.println(testar2.getAccountNumber());
-
-
-
-
-    }
 
 }

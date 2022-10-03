@@ -1,3 +1,12 @@
+/**
+ * Denna klass representerar en kund i banken. Klassen innehåller information såsom namn, efternamn, personnummer
+ * och en lista med konton.
+ *
+ *  Jag har skapat en metod som gör det enklare i BankLogic att hitta ett valt konto eller ta bort ett konto
+ * @author Per Granberg, epager-1
+ */
+
+
 package ObjectOrientedCourse.epager1;
 
 import java.util.ArrayList;
@@ -18,7 +27,7 @@ public class Customer {
 
     }
 
-    // method to create a account to the customer
+
     public int createAccount(){
         Account newAcc = new Account();
         accountList.add(newAcc);
@@ -53,6 +62,7 @@ public class Customer {
         surName = newSurName;
     }
 
+
     public void changeNames(String newName, String newSurName){
         if(newName.isEmpty() == false) name = newName;
         if (newSurName.isEmpty() == false) surName = newSurName;
@@ -61,7 +71,11 @@ public class Customer {
 
 
 
-    // get the account based on a accountNbr
+    /**
+     * Metod för att hitta ett konto hos kunden
+     * @param int accountNbr
+     * @return Account, null om kontot inte finns
+     */
     public Account findAccount(int accountNbr){
         Account foundAccount = null;
         for(Account account: accountList){
@@ -74,6 +88,11 @@ public class Customer {
     }
 
 
+    /**
+     * Ta bort kontot som finns i kundens lista
+     * @param int accountNbr
+     * @return String, information om kontot som stängdes
+     */
     public String removeAccount(int accountNbr){
         Account foundAccount = findAccount(accountNbr);
         if (foundAccount != null){
@@ -86,29 +105,18 @@ public class Customer {
     }
 
 
+    /**
+     * Tar bort alla konton genom att ersätta kundens ArrayList med konton med en tom lista
+     */
     public void removeAllAccounts(){
         ArrayList<Account> accountList = new ArrayList<Account>();
     }
 
-    // Must override the toString function in order to print the correct format
+
     @Override
     public String toString() {
         return (personalNumber + " " + getFullName());
     }
-
-    public static void main(String[] args) {
-        Customer test = new Customer("Per", "Granberg", "9409184565");
-        System.out.println(test.createAccount());
-        Customer test2 = new Customer("Per", "Granberg", "9409184565");
-        System.out.println(test2.createAccount());
-        System.out.println(test2);
-
-
-
-    }
-
-
-
 
 
 }

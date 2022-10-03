@@ -1,3 +1,14 @@
+/**
+ * Denna klass använder metoder från Account och Customer för att kunna representera en bank.
+ *
+ * Här skapas en kund för att sedan läggas i en ArrayList som innehåller alla kunder.
+ * Det finns sedan många metoder för att ändra eller skapa saker gällande kunder och konton.
+ *
+ * @author Per Granberg, epager-1
+ */
+
+
+
 package ObjectOrientedCourse.epager1;
 
 import java.math.BigDecimal;
@@ -14,6 +25,11 @@ public class BankLogic {
 
     }
 
+
+    /**
+     * Skriver ut alla kunder i en fin array med string
+     * @return ArrayList<String> av customers
+     */
     public ArrayList<String> getAllCustomers(){
         ArrayList<String> allCustomers = new ArrayList<String>();
         for(Customer customer: customersList){
@@ -22,8 +38,12 @@ public class BankLogic {
         return allCustomers;
     }
 
+    /**
+     * Skapar en kund genom att använda datan från parametrarna
+     * @param name, surname, pNo
+     * @return Boolean
+     */
     public boolean createCustomer(String name, String surname, String pNo){
-       // Customer account = customersList.stream().filter(a -> a.getPersonalNumber() == pNo).collect(Collectors.toList()).get(0);
         if (findCustomer(pNo) == null){
             Customer newCustomer = new Customer(name, surname, pNo);
             customersList.add(newCustomer);
@@ -32,7 +52,11 @@ public class BankLogic {
         return false;
     }
 
-
+    /**
+     * Skriver ut information om en kund som identifieras via personnummer
+     * @param String personnummer
+     * @return ArrayList<String> eller null om kunden inte finns
+     */
     public ArrayList<String> getCustomer(String pNo){
         Customer customer = findCustomer(pNo);
         if (customer != null){
@@ -49,8 +73,11 @@ public class BankLogic {
         return null;
     }
 
-
-
+    /**
+     * En metod för att kunna ändra kundens namn och efternamn
+     * @param String name, String surname, String pNo
+     * @return Boolean
+     */
     public boolean changeCustomerName(String name, String surname, String pNo){
         Customer customer = findCustomer(pNo);
         Boolean nameChange = name.isEmpty();
@@ -64,9 +91,14 @@ public class BankLogic {
        return false;
     }
 
+    /**
+     * Skapar ett sparkonto, använder metoder från Customer klassen också
+     * @param String pNo
+     * @return Int, kontonumret eller -1 om kunden inte finns
+     */
     public int createSavingsAccount(String pNo){
         Customer customer = findCustomer(pNo);
-        if ( customer != null){
+        if ( customer != null ){
             int accountNbr =  customer.createAccount();
             return accountNbr;
 
@@ -74,6 +106,11 @@ public class BankLogic {
         return -1;
     }
 
+    /**
+     * Få en utskrift om ett konto
+     * @param String pNo, int accountId
+     * @return String, utskrift om kontoinformationen
+     */
     public String getAccount(String pNo, int accountId){
         Account foundAccount = findAccount(pNo, accountId);
         if (foundAccount != null){
@@ -82,6 +119,11 @@ public class BankLogic {
         return null;
     }
 
+    /**
+     * Gör att man kan ta ut pengar från kontot med matchande accountId
+     * @param String pNo, int accountId, int amount
+     * @return Boolean, true om man kunde ta ut pengarna
+     */
     public boolean deposit(String pNo, int accountId, int amount){
         Account foundAccount = findAccount(pNo, accountId);
         if (foundAccount != null && amount > 0){
@@ -91,6 +133,11 @@ public class BankLogic {
         return false;
     }
 
+    /**
+     * Gör att man kan ta ut pengar från sitt konto
+     * @param String pNo, int accountId, int amount
+     * @return Boolean
+     */
     public boolean withdraw(String pNo, int accountId, int amount){
         Account foundAccount = findAccount(pNo, accountId);
         if (foundAccount != null){
@@ -100,6 +147,11 @@ public class BankLogic {
 
     }
 
+    /**
+     * Gör att man kan stänga ett konto för en användare
+     * @param String pNo, int accountId
+     * @return Boolean
+     */
     public String closeAccount(String pNo, int accountId){
         Customer foundCustomer = findCustomer(pNo);
         if (foundCustomer != null) {
@@ -112,10 +164,11 @@ public class BankLogic {
 
     }
 
-
-
-
-    // method to search the customerList and return the customer with the pNo or Null if it does not exist in the list
+    /**
+     * En metod för att hitta en användare och som kan återanvändas
+     * @param String pNo
+     * @return Customer som hittades eller null om kunden inte finns
+     */
     private Customer findCustomer(String pNo){
         Customer foundCustomer = null;
         for(Customer customer: customersList){
@@ -127,6 +180,12 @@ public class BankLogic {
         return foundCustomer;
     }
 
+
+    /**
+     * En metod för att hitta ett konto för en användare. Skapdes för att man inte ska behöva upprepa samma sak
+     * @param String pNo, int accountId
+     * @return Account eller null om kontot inte finns
+     */
     private Account findAccount(String pNo, int accountId){
         Customer customer = findCustomer(pNo);
         if (customer != null) {
@@ -137,6 +196,12 @@ public class BankLogic {
     }
 
 
+
+    /**
+     * Delete all data för en kund
+     * @param String pNo
+     * @return ArrayList<String>, innehåller information om kunden som togs bort
+     */
     public ArrayList<String> deleteCustomer( String pNo){
         Customer customer = findCustomer(pNo);
         if (customer != null) {
@@ -154,43 +219,8 @@ public class BankLogic {
         }
 
         return null;
-
-
     }
 
-
-
-
-
-
-
-    public static void main(String[] args) {
-        BankLogic hoho = new BankLogic();
-        hoho.createCustomer("Per", "Granberg", "423");
-        hoho.createCustomer("Erik", "Granberg", "523");
-        hoho.createCustomer("Lars", "Granberg", "923");
-        //System.out.println(hoho.customersList.toString());
-        System.out.println(hoho.getAllCustomers());
-        System.out.println(hoho.getCustomer("923"));
-        hoho.changeCustomerName("Lars New", "hoho", "923");
-        hoho.changeCustomerName("", "", "523");
-        hoho.createSavingsAccount("523");
-        hoho.createSavingsAccount("523");
-        System.out.println(hoho.getAllCustomers());
-        System.out.println(hoho.getCustomer("523"));
-        System.out.println(hoho.getAccount("523", 10902));
-        hoho.deposit("523", 1001, 1050);
-        System.out.println(hoho.getCustomer("523"));
-        hoho.withdraw("523", 1001, 50);
-        System.out.println(hoho.getCustomer("523"));
-        System.out.println(hoho.closeAccount("523", 1001));
-        System.out.println(hoho.getCustomer("523"));
-        System.out.println(hoho.deleteCustomer("523"));
-        System.out.println(hoho.getAllCustomers());
-        //hoho.findCustomer("523");
-
-
-    }
 
 
 }

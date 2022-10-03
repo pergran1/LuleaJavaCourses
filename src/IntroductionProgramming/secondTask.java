@@ -1,4 +1,16 @@
+
 package IntroductionProgramming;
+/**
+ * Denna kod kommer först be användaren att specificera ett datumn med format mm-dd
+ * Ingen kontroll görs på att formatet är rätt men det görs en kontroll som bevisar om månaden är 6 eller 7
+ * Sedan kommer användaren skriva in soluppgång och solnedgång. En kontroll görs för att kolla att soluppgången
+ * är tidigare än solnedgången.
+ *
+ * Sedan beräknas antalet soltimmar och effekten och priset som dessa soltimmar ger, resultatet presenteras i
+ * en fin print sats
+ *
+ * @author Per Granberg, epager-1
+ */
 
 import java.util.Scanner;
 
@@ -32,7 +44,6 @@ public class secondTask {
         System.out.println("Skriv dagens datum [mm-dd]>");
         month = userInput.nextInt();
         day = userInput.nextInt();
-        System.out.println(month);
         if(month < 6 || month > 7){
             System.out.println("Felmeddelande! Du har angett en månad som inte är juni eller juli");
             System.exit(0);
@@ -43,6 +54,7 @@ public class secondTask {
         userInput.nextLine();
         sunriseHour = userInput.nextInt();
         sunriseMinute = userInput.nextInt();
+        checkMinutes(sunriseMinute); // control if it is above 60
 
 
         System.out.println("Skriv in tidpunkt solnedgång [hh:mm]>");
@@ -51,26 +63,29 @@ public class secondTask {
 
         sunsetHour = userInput.nextInt();
         sunsetMinute = userInput.nextInt();
-        //userInput.nextLine();
-
-        checkMinutes(sunriseMinute);
         checkMinutes(sunsetMinute);
 
 
         double sunHours = sunsetHour - sunriseHour + ((sunsetMinute/60.0) - (sunriseMinute/60.0));
+        if (sunHours < 0 ) {
+            System.out.println("Felmeddelande! Du har angivit en solnedgång som inträffar tidigare än " +
+                    "din soluppgång, och detta är enligt naturens lagar omöjligt");
+            System.exit(0);
+
+        }
         double production = (SUNRAY * SOLAR_CELL_AFFECT * AREA_OF_AFFECT * sunHours) / 1000;
         double totalCost = production * ELECTRICAL_PRICE;
-        System.out.println(production);
-        System.out.printf("sunhours is: %.2f\n", sunHours );
-        System.out.printf("Produktionen %d/%d är:  %.2f kWh till ett värde av: %.2f", day, month, production, totalCost );
 
-
+        // Print out the information
+        System.out.println("===========================================");
+        System.out.printf("Soltimmar: %.2f timmar\n", sunHours );
+        System.out.printf("Produktionen %d/%d är:  %.2f kWh till ett värde av: %.2f kr", day, month, production, totalCost );
 
     }
 
     public static void checkMinutes(int minutes){
-        if(minutes > 60 || minutes < 0 ) {
-            System.out.println("Felmeddelande! Du har angett ett minutvärde som är negativt eller över 60");
+        if(minutes > 60 ) {
+            System.out.println("Felmeddelande! Du har angett ett minutvärde som är över 60 minuter");
             System.exit(0);
         }
     }
