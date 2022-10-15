@@ -62,12 +62,7 @@ public class BankLogic {
         if (customer != null){
             ArrayList<String> customerInfo = new ArrayList<String>();
             customerInfo.add(customer.toString());
-
-            ArrayList<Account> accountList = customer.getAccountList();
-            for (Account account: accountList){
-                customerInfo.add(account.toString());
-            }
-
+            customerInfo.addAll(customer.getStringAccountList());
             return customerInfo;
         }
         return null;
@@ -207,12 +202,7 @@ public class BankLogic {
         if (customer != null) {
             ArrayList<String> deleteCustomerStr = new ArrayList<String>();
             deleteCustomerStr.add(customer.toString());
-
-            ArrayList<Account> accountList = customer.getAccountList();
-
-            for (Account account: accountList){
-                deleteCustomerStr.add(account.closeAccStr());
-            }
+            deleteCustomerStr.addAll(customer.getDeletionStringAccountList());
             customer.removeAllAccounts();
             customersList.remove(customer);
             return deleteCustomerStr;
@@ -221,6 +211,8 @@ public class BankLogic {
         return null;
     }
 
-
+    public static void main(String[] args){
+        System.out.println("Detta körs");
+    }
 
 }
