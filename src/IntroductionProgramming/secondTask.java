@@ -44,7 +44,7 @@ public class secondTask {
         System.out.println("Skriv dagens datum [mm-dd]>");
         month = userInput.nextInt();
         day = userInput.nextInt();
-        if(month < 6 || month > 7){
+        if (month < 6 || month > 7) {
             System.out.println("Felmeddelande! Du har angett en månad som inte är juni eller juli");
             System.exit(0);
         }
@@ -54,6 +54,7 @@ public class secondTask {
         userInput.nextLine();
         sunriseHour = userInput.nextInt();
         sunriseMinute = userInput.nextInt();
+        checkHour(sunriseHour);
         checkMinutes(sunriseMinute); // control if it is above 60
 
 
@@ -63,12 +64,13 @@ public class secondTask {
 
         sunsetHour = userInput.nextInt();
         sunsetMinute = userInput.nextInt();
+        checkHour(sunsetHour);
         checkMinutes(sunsetMinute);
 
 
-        double sunHours = sunsetHour - sunriseHour + ((sunsetMinute/60.0) - (sunriseMinute/60.0));
-        if (sunHours < 0 ) {
-            System.out.println("Felmeddelande! Du har angivit en solnedgång som inträffar tidigare än " +
+        double sunHours = sunsetHour - sunriseHour + ((sunsetMinute / 60.0) - (sunriseMinute / 60.0));
+        if (sunHours <= 0) {
+            System.out.println("Felmeddelande! Du har angivit en solnedgång som inträffar tidigare eller samtidigt som " +
                     "din soluppgång, och detta är enligt naturens lagar omöjligt");
             System.exit(0);
 
@@ -78,15 +80,23 @@ public class secondTask {
 
         // Print out the information
         System.out.println("===========================================");
-        System.out.printf("Soltimmar: %.2f timmar\n", sunHours );
-        System.out.printf("Produktionen %d/%d är:  %.2f kWh till ett värde av: %.2f kr", day, month, production, totalCost );
+        System.out.printf("Soltimmar: %.2f timmar\n", sunHours);
+        System.out.printf("Produktionen %d/%d är:  %.2f kWh till ett värde av: %.2f kr", day, month, production, totalCost);
 
     }
 
-    public static void checkMinutes(int minutes){
-        if(minutes > 60 ) {
+    public static void checkMinutes(int minutes) {
+        if (minutes > 59) {
             System.out.println("Felmeddelande! Du har angett ett minutvärde som är över 60 minuter");
             System.exit(0);
         }
     }
+
+    public static void checkHour ( int hour){
+        if (hour > 23 || hour < 0) {
+            System.out.println("Felmeddelande! Du har angett ett timvärde som inte är mellan 00 eller 23");
+            System.exit(0);
+        }
+    }
+
 }
