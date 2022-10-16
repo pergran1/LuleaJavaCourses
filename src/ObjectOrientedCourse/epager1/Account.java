@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Account {
+public abstract class Account {
     protected BigDecimal balance;
     protected BigDecimal interest;
     protected int accountNumber;
@@ -73,13 +73,7 @@ public class Account {
      * Skapar en sträng för att visa information om kontot
      */
     @Override
-    public String toString() {
-        String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
-        NumberFormat percentFormat = NumberFormat.getPercentInstance(new Locale("sv","SE"));
-        percentFormat.setMaximumFractionDigits(1); // Anger att vi vill ha max 1 decimal
-        String percentStr = percentFormat.format( interest.doubleValue() );
-        return (accountNumber + " " + balanceStr + " " +  accountType + " " + percentStr);
-    }
+    public abstract String toString();
 
     /**
      * Skapar en sträng för att skriva ut konto information när man stänger ett konto
