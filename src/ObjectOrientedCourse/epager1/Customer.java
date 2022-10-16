@@ -50,8 +50,21 @@ public class Customer {
         return name + " " + surName;
     }
 
-    public ArrayList<Account> getAccountList(){
-        return accountList;
+
+    public ArrayList<String> getStringAccountList(){
+        ArrayList<String> strList = new ArrayList<String>();
+        for (Account account: accountList){
+            strList.add(account.toString());
+        }
+        return strList;
+    }
+
+    public ArrayList<String> getDeletionStringAccountList(){
+        ArrayList<String> strList = new ArrayList<String>();
+        for (Account account: accountList){
+            strList.add(account.closeAccStr());
+        }
+        return strList;
     }
 
     public void setName(String newName){
@@ -66,7 +79,6 @@ public class Customer {
     public void changeNames(String newName, String newSurName){
         if(newName.isEmpty() == false) name = newName;
         if (newSurName.isEmpty() == false) surName = newSurName;
-
     }
 
 
@@ -100,7 +112,6 @@ public class Customer {
             accountList.remove(foundAccount);
             return closeAccount;
         }
-
         return null;
     }
 
