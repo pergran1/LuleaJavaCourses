@@ -29,7 +29,13 @@ public class Customer {
 
 
     public int createAccount(){
-        Account newAcc = new Account();
+        Account newAcc = new SavingsAccount();
+        accountList.add(newAcc);
+        return newAcc.getAccountNumber();
+    }
+
+    public int createCreditAccount(){
+        Account newAcc = new CreditAccount();
         accountList.add(newAcc);
         return newAcc.getAccountNumber();
     }

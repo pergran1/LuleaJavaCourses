@@ -17,11 +17,11 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class Account {
-    private BigDecimal balance;
-    private BigDecimal interest;
-    private int accountNumber;
-    private static int nbrOfAccounts = 1000;
-    private String accountType;
+    protected BigDecimal balance;
+    protected BigDecimal interest;
+    protected int accountNumber;
+    protected static int nbrOfAccounts = 1000;
+    protected String accountType;
 
     public Account() {
         nbrOfAccounts++;
@@ -66,8 +66,6 @@ public class Account {
             return true;
         }
         return false;
-
-
     }
 
 

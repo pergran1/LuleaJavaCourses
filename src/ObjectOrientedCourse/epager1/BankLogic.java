@@ -101,6 +101,21 @@ public class BankLogic {
         return -1;
     }
 
+    public int createCreditAccount(String pNo){
+        Customer customer = findCustomer(pNo);
+        if ( customer != null ){
+            int accountNbr =  customer.createCreditAccount();
+            return accountNbr;
+
+        }
+        return -1;
+
+    }
+
+    public ArrayList<String> getTransactions(String pNo, int accountId){
+        return null;
+    }
+
     /**
      * Få en utskrift om ett konto
      * @param String pNo, int accountId
