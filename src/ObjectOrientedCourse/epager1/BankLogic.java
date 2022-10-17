@@ -113,6 +113,10 @@ public class BankLogic {
     }
 
     public ArrayList<String> getTransactions(String pNo, int accountId){
+        Account foundAccount = findAccount(pNo, accountId);
+        if (foundAccount != null){
+            return foundAccount.getTransactionList();
+        }
         return null;
     }
 
@@ -174,6 +178,12 @@ public class BankLogic {
 
     }
 
+
+
+
+
+
+
     /**
      * En metod för att hitta en användare och som kan återanvändas
      * @param String pNo
@@ -228,6 +238,15 @@ public class BankLogic {
 
     public static void main(String[] args){
         System.out.println("Detta körs");
+        BankLogic testar = new BankLogic();
+        testar.createCustomer("Nils", "Nilsson", "555");
+        testar.createCreditAccount("555");
+        testar.deposit("555", 1001, 500);
+        System.out.println(testar.getTransactions("555", 1001));
+        System.out.println(testar.getCustomer("555"));
+        System.out.println(testar.getAccount("555", 10001));
+
+
     }
 
 }

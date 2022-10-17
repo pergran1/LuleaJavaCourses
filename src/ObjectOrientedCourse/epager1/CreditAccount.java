@@ -17,11 +17,12 @@ public class CreditAccount extends Account{
 
     }
 
-
+    @Override
     public boolean withdraw(int amount){
         int newBalanceWouldBe = balance.subtract(new BigDecimal(amount)).intValue();
         if( amount > 0 && newBalanceWouldBe >= creditLimit) {
             balance = balance.subtract(new BigDecimal(amount));
+            writeTransactions(amount, balance, true);
             return true;
         }
         return false;
@@ -40,6 +41,23 @@ public class CreditAccount extends Account{
             return (accountNumber + " " + balanceStr + " " +  accountType + " " + percentDebtInterest);
         }
 
+    }
+
+    @Override
+    public String closeAccStr() {
+        // check if the balance is negative
+        BigDecimal finalInterest;
+        if (balance.compareTo(BigDecimal.ZERO) < 0){
+            finalInterest =  debtInterest.multiply(balance);
+        } else{
+            finalInterest =  interest.multiply(balance);
+        }
+
+        NumberFormat percentFormat = NumberFormat.getPercentInstance(new Locale("sv","SE"));
+        percentFormat.setMaximumFractionDigits(1);
+        String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
+        String finalStr= NumberFormat.getCurrencyInstance().format(finalInterest);
+        return (accountNumber + " " + balanceStr + " " +  accountType + " " + finalStr);
     }
 
 

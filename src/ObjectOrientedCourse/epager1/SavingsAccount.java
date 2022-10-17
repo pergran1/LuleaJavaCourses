@@ -12,6 +12,7 @@ public class SavingsAccount extends Account{
 
     }
 
+    @Override
     public boolean withdraw(int amount){
         double totalAmount;
         if(usedFreeWithdraw == true){
@@ -24,6 +25,7 @@ public class SavingsAccount extends Account{
         int checkAmountLessBalance = balance.compareTo(BigDecimal.valueOf(totalAmount));
         if( amount > 0 && checkAmountLessBalance >= 0) {
             balance = balance.subtract(new BigDecimal(totalAmount));
+            writeTransactions(amount, balance, true);
             return true;
         }
         return false;
