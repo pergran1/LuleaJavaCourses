@@ -5,21 +5,23 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class SavingsAccount extends Account{
-    private boolean usedFreeWithdraw;
+    private boolean usedFirstTime;
+    private double savingInterest;
 
     public SavingsAccount(){
-        this.usedFreeWithdraw = false;
+        this.usedFirstTime = false;
+        this.savingInterest = 0.02;
 
     }
 
     @Override
     public boolean withdraw(int amount){
         double totalAmount;
-        if(usedFreeWithdraw == true){
-            double twoPercent = amount * 0.02;
+        if(usedFirstTime == true){
+            double twoPercent = amount * savingInterest;
             totalAmount = amount + twoPercent;
         } else{
-            usedFreeWithdraw = true;
+            usedFirstTime = true;
             totalAmount = amount;
         }
         int checkAmountLessBalance = balance.compareTo(BigDecimal.valueOf(totalAmount));
@@ -38,16 +40,6 @@ public class SavingsAccount extends Account{
         percentFormat.setMaximumFractionDigits(1); // Anger att vi vill ha max 1 decimal
         String percentStr = percentFormat.format( interest.doubleValue() );
         return (accountNumber + " " + balanceStr + " " +  accountType + " " + percentStr);
-    }
-
-    public static void main(String[] args){
-        SavingsAccount testar = new SavingsAccount();
-        System.out.println(testar);
-        testar.deposit(40);
-        System.out.println(testar.withdraw(30));
-        System.out.println(testar);
-        System.out.println(testar.withdraw(3));
-        System.out.println(testar);
     }
 
 }

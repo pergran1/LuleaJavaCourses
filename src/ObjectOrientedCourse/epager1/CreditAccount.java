@@ -61,17 +61,4 @@ public class CreditAccount extends Account{
     }
 
 
-    public static void main(String[] args){
-        CreditAccount testar = new CreditAccount();
-        System.out.println(testar);
-        testar.deposit(500);
-        System.out.println(testar);
-        testar.withdraw(6000);
-        System.out.println(testar);
-
-    }
-
-
-
-
 }

@@ -35,14 +35,6 @@ public abstract class Account {
         this.accountType = "Sparkonto";
     }
 
-    public BigDecimal getBalance(){
-        return balance;
-    }
-
-    public String getAccount(){
-        return accountType;
-    }
-
     public int getAccountNumber(){
         return accountNumber;
     }
@@ -64,14 +56,8 @@ public abstract class Account {
      * //@param int amount
      * @return Boolean
      */
-    public boolean withdraw(int amount){
-        int checkAmountLessBalance = balance.compareTo(BigDecimal.valueOf(amount));
-        if( amount > 0 && checkAmountLessBalance >= 0) {
-            balance = balance.subtract(new BigDecimal(amount));
-            return true;
-        }
-        return false;
-    }
+
+    public abstract boolean withdraw(int amount);
 
 
     /**
