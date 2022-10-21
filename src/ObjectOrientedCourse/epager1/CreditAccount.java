@@ -1,3 +1,12 @@
+/**
+ * Detta är en subclass till Account
+ * Ändrad accountType till "Kreditkonto", även ändrad interest och lagt till debtInterest
+ * Även annan sätt för att beräkna hur banken tar från kontot vid avslut
+ *
+ * @author Per Granberg, epager-1
+ */
+
+
 package ObjectOrientedCourse.epager1;
 
 import java.math.BigDecimal;
@@ -17,6 +26,12 @@ public class CreditAccount extends Account{
 
     }
 
+
+    /**
+     * Gör att man kan ta ut pengar från sitt kreditkort
+     * @param int amount
+     * @return Boolean
+     */
     @Override
     public boolean withdraw(int amount){
         int newBalanceWouldBe = balance.subtract(new BigDecimal(amount)).intValue();
@@ -28,6 +43,10 @@ public class CreditAccount extends Account{
         return false;
     }
 
+
+    /**
+     * Gör en bra utskrift
+     */
     @Override
     public String toString() {
         String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
@@ -43,6 +62,10 @@ public class CreditAccount extends Account{
 
     }
 
+
+    /**
+     * Gör en bra utskrift när man stänger kontot
+     */
     @Override
     public String closeAccStr() {
         // check if the balance is negative

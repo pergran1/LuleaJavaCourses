@@ -1,9 +1,7 @@
 /**
- * Denna klass representerar ett sparkonto
- * Den innehåller variabler såsom pengar, ränta, kontonummer och typ av konto
- * Men ska kunna hämta och ändra några variabler, bland annat ta ut eller sätta in pengar
- *
- * Metoder finns även för att få en bra utskrift av kontot
+ * Denna klass är en abstract klass av ett konto som innehåller många av de
+ * variabler och metoder som SavingsAccount samt CreditAccount använder.
+ * Här finns metoder såsom lägga till eller ta ut pengar samt spara information om varje transaktion
  *
  * @author Per Granberg, epager-1
  */
@@ -23,7 +21,7 @@ public abstract class Account {
     protected BigDecimal balance;
     protected BigDecimal interest;
     protected int accountNumber;
-    protected static int nbrOfAccounts = 1000;
+    private static int nbrOfAccounts = 1000;
     protected String accountType;
     protected ArrayList<String> transactionList = new ArrayList<String>();
 
@@ -79,6 +77,10 @@ public abstract class Account {
     }
 
 
+    /**
+     * Sparar information från varje transaktion
+     * @param int amount, BigDecimal balance, boolean convertToNegative
+     */
     public void writeTransactions(int amount, BigDecimal balance, boolean convertToNegative){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = sdf.format(new Date());

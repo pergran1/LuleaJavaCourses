@@ -1,3 +1,11 @@
+/**
+ * Detta är en subclass till Account.
+ * Saker som är ändrade är att man har ett gratis uttag vid första användningen sen måste man betala en lite avgift
+ *
+ *
+ * @author Per Granberg, epager-1
+ */
+
 package ObjectOrientedCourse.epager1;
 
 import java.math.BigDecimal;
@@ -14,6 +22,12 @@ public class SavingsAccount extends Account{
 
     }
 
+
+    /**
+     * withdraw som beräknas beroende på SavingAccounts savingInterest
+     * @param int amount
+     * @return boolean
+     */
     @Override
     public boolean withdraw(int amount){
         double totalAmount;
@@ -33,6 +47,10 @@ public class SavingsAccount extends Account{
         return false;
     }
 
+
+    /**
+     * toString för att få en bra utskrift
+     */
     @Override
     public String toString() {
         String balanceStr = NumberFormat.getCurrencyInstance().format(balance);

@@ -57,6 +57,10 @@ public class Customer {
     }
 
 
+
+    /**
+     * Metod som gör en bra utskrift när man ska ha information om konton
+     */
     public ArrayList<String> getStringAccountList(){
         ArrayList<String> strList = new ArrayList<String>();
         for (Account account: accountList){
@@ -65,6 +69,11 @@ public class Customer {
         return strList;
     }
 
+
+
+    /**
+     * Metod som gör en bra utskrift när man stänger konton
+     */
     public ArrayList<String> getDeletionStringAccountList(){
         ArrayList<String> strList = new ArrayList<String>();
         for (Account account: accountList){
@@ -129,7 +138,9 @@ public class Customer {
         ArrayList<Account> accountList = new ArrayList<Account>();
     }
 
-
+    /**
+     * toString metod för att få en bra utskrift
+     */
     @Override
     public String toString() {
         return (personalNumber + " " + getFullName());
