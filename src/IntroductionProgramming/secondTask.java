@@ -48,6 +48,7 @@ public class secondTask {
             System.out.println("Felmeddelande! Du har angett en månad som inte är juni eller juli");
             System.exit(0);
         }
+        checkDays(month, day);
 
         System.out.println("Skriv in tidpunkt soluppgång [hh:mm]>");
         userInput.useDelimiter(":|\\s+");
@@ -56,6 +57,7 @@ public class secondTask {
         sunriseMinute = userInput.nextInt();
         checkHour(sunriseHour);
         checkMinutes(sunriseMinute); // control if it is above 60
+
 
 
         System.out.println("Skriv in tidpunkt solnedgång [hh:mm]>");
@@ -86,7 +88,7 @@ public class secondTask {
     }
 
     public static void checkMinutes(int minutes) {
-        if (minutes > 59) {
+        if (minutes > 59 || minutes < 0) {
             System.out.println("Felmeddelande! Du har angett ett minutvärde som är över 60 minuter");
             System.exit(0);
         }
@@ -98,5 +100,21 @@ public class secondTask {
             System.exit(0);
         }
     }
+
+
+    public static void checkDays(int month, int day){
+        if (month == 6){
+            if(day > 30 || day <= 0){
+                System.out.println("Felmeddelande! Du har angett en dag för månad 6 som inte finns");
+                System.exit(0);
+            }
+        } else {
+            if (day > 31 || day <= 0) {
+                System.out.println("Felmeddelande! Du har angett en dag för månad 7 som inte finns");
+                System.exit(0);
+            }
+        }
+    }
+
 
 }
