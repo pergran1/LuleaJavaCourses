@@ -23,6 +23,10 @@ public class thirdTask {
 
         int loopCount = 0;
 
+        boolean oneUsed = false;
+        boolean twoUsed = false;
+        boolean threeUsed = false;
+
         while(true)
         {
             // ha en counter variabel här som räknar hur många gånger man har spelat och avlutar efter tredje?
@@ -46,13 +50,31 @@ public class thirdTask {
                     continue;
                 }
                 else if(intAnswer == 1){
+                    if(oneUsed == true){
+                        System.out.println("Du har redan kastad tärning nr 1, gör ett kast igen");
+                        continue;
+                    }
+
                     diceOne = getRandomNumber();
+                    oneUsed = true;
                 }
                 else if(intAnswer == 2) {
+                    if(twoUsed == true){
+                        System.out.println("Du har redan kastad tärning nr 2, gör ett kast igen");
+                        continue;
+                    }
+
                     diceTwo = getRandomNumber();
+                    twoUsed = true;
                 }
                 else if(intAnswer == 3) {
+                    if(threeUsed == true){
+                        System.out.println("Du har redan kastad tärning nr 3, gör ett kast igen");
+                        continue;
+                    }
+
                     diceThree = getRandomNumber();
+                    threeUsed = true;
                 }
 
                 sum = diceOne + diceTwo + diceThree;
@@ -75,6 +97,9 @@ public class thirdTask {
                     diceTwo = 0;
                     diceThree = 0;
                     loopCount = 0;
+                    oneUsed = false;
+                    twoUsed = false;
+                    threeUsed = false;
                     continue;
                 }
                 printResults(diceOne, diceTwo, diceThree, wins, losses);
