@@ -1,5 +1,6 @@
 /**
- * Denna klass använder metoder från Account och Customer för att kunna representera en bank.
+ * Denna klass använder metoder från Account, SavingsAccount, CreditAccount
+ * och Customer för att kunna representera en bank.
  *
  * Här skapas en kund för att sedan läggas i en ArrayList som innehåller alla kunder.
  * Det finns sedan många metoder för att ändra eller skapa saker gällande kunder och konton.
@@ -101,6 +102,25 @@ public class BankLogic {
         return -1;
     }
 
+    public int createCreditAccount(String pNo){
+        Customer customer = findCustomer(pNo);
+        if ( customer != null ){
+            int accountNbr =  customer.createCreditAccount();
+            return accountNbr;
+
+        }
+        return -1;
+
+    }
+
+    public ArrayList<String> getTransactions(String pNo, int accountId){
+        Account foundAccount = findAccount(pNo, accountId);
+        if (foundAccount != null){
+            return foundAccount.getTransactionList();
+        }
+        return null;
+    }
+
     /**
      * Få en utskrift om ett konto
      * @param String pNo, int accountId
@@ -159,6 +179,9 @@ public class BankLogic {
 
     }
 
+
+
+
     /**
      * En metod för att hitta en användare och som kan återanvändas
      * @param String pNo
@@ -211,8 +234,5 @@ public class BankLogic {
         return null;
     }
 
-    public static void main(String[] args){
-        System.out.println("Detta körs");
-    }
 
 }

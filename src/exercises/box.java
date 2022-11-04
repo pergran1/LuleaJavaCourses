@@ -1,5 +1,8 @@
 package exercises;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class box {
     // Exercieses in inheritance
     // Create a abstract class that describe a box and then create different boxes with different lengths and so on
@@ -22,6 +25,10 @@ public class box {
     public static void main(String[] args) {
         box testBox = new box(2,5);
         System.out.println(testBox);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = sdf.format(new Date());
+        System.out.println(strDate);
+
     }
 
 

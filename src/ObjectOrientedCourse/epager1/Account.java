@@ -1,9 +1,7 @@
 /**
- * Denna klass representerar ett sparkonto
- * Den innehåller variabler såsom pengar, ränta, kontonummer och typ av konto
- * Men ska kunna hämta och ändra några variabler, bland annat ta ut eller sätta in pengar
- *
- * Metoder finns även för att få en bra utskrift av kontot
+ * Denna klass är en abstract klass av ett konto som innehåller många av de
+ * variabler och metoder som SavingsAccount samt CreditAccount använder.
+ * Här finns metoder såsom lägga till eller ta ut pengar samt spara information om varje transaktion
  *
  * @author Per Granberg, epager-1
  */
@@ -14,14 +12,18 @@ package ObjectOrientedCourse.epager1;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
-public class Account {
-    private BigDecimal balance;
-    private BigDecimal interest;
-    private int accountNumber;
+public abstract class Account {
+    protected BigDecimal balance;
+    protected BigDecimal interest;
+    protected int accountNumber;
     private static int nbrOfAccounts = 1000;
-    private String accountType;
+    protected String accountType;
+    protected ArrayList<String> transactionList = new ArrayList<String>();
 
     public Account() {
         nbrOfAccounts++;
@@ -29,14 +31,6 @@ public class Account {
         this.interest= new BigDecimal("0.012");
         this.accountNumber = nbrOfAccounts;
         this.accountType = "Sparkonto";
-    }
-
-    public BigDecimal getBalance(){
-        return balance;
-    }
-
-    public String getAccount(){
-        return accountType;
     }
 
     public int getAccountNumber(){
@@ -52,36 +46,23 @@ public class Account {
      */
     public void deposit(int amount){
         balance = balance.add(new BigDecimal(amount));
+        writeTransactions(amount, balance, false);
     }
 
     /**
      * tar ut pengar från kontot
-     * @param int amount
+     * //@param int amount
      * @return Boolean
      */
-    public boolean withdraw(int amount){
-        int checkAmountLessBalance = balance.compareTo(BigDecimal.valueOf(amount));
-        if( amount > 0 && checkAmountLessBalance >= 0) {
-            balance = balance.subtract(new BigDecimal(amount));
-            return true;
-        }
-        return false;
 
-
-    }
+    public abstract boolean withdraw(int amount);
 
 
     /**
      * Skapar en sträng för att visa information om kontot
      */
     @Override
-    public String toString() {
-        String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
-        NumberFormat percentFormat = NumberFormat.getPercentInstance(new Locale("sv","SE"));
-        percentFormat.setMaximumFractionDigits(1); // Anger att vi vill ha max 1 decimal
-        String percentStr = percentFormat.format( interest.doubleValue() );
-        return (accountNumber + " " + balanceStr + " " +  accountType + " " + percentStr);
-    }
+    public abstract String toString();
 
     /**
      * Skapar en sträng för att skriva ut konto information när man stänger ett konto
@@ -92,7 +73,29 @@ public class Account {
         percentFormat.setMaximumFractionDigits(1);
         String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
         String finalStr= NumberFormat.getCurrencyInstance().format(finalInterest);
-        return (accountNumber+ " " + balanceStr + " " +  accountType + " " + finalStr);
+        return (accountNumber + " " + balanceStr + " " +  accountType + " " + finalStr);
+    }
+
+
+    /**
+     * Sparar information från varje transaktion
+     * @param int amount, BigDecimal balance, boolean convertToNegative
+     */
+    public void writeTransactions(int amount, BigDecimal balance, boolean convertToNegative){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = sdf.format(new Date());
+        if(convertToNegative == true){
+             amount = amount * -1;
+        }
+        String balanceStr = NumberFormat.getCurrencyInstance().format(balance);
+        String amountStr = NumberFormat.getCurrencyInstance().format(amount);
+        String transactionStr = strDate + " " + amountStr + " Saldo: " + balanceStr;
+        transactionList.add(transactionStr);
+
+    }
+
+    public ArrayList<String> getTransactionList(){
+        return transactionList;
     }
 
 
