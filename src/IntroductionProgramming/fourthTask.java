@@ -1,7 +1,6 @@
 package IntroductionProgramming;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -12,13 +11,13 @@ public class fourthTask {
 
         int[] numberArray = new int[0];
         int[] tempArray = new int[0];
+        int indexForEven = 0;
+        int indexForUneven = 0;
 
         System.out.println("Hur många slumptal i intervallet 0 - 999 önskas?");
 
-        // Get a int from the user
 
-
-
+        // Get the input from the user, only a int will work
         Scanner scan = new Scanner(System.in);
         while (!scan.hasNextBigInteger()) {
             System.out.println("Input is not a number.");
@@ -26,8 +25,7 @@ public class fourthTask {
         }
         int number = scan.nextInt();
 
-       // System.out.println("Number is " + number);
-
+        // Checking if it is to many numbers
         try
         {
             numberArray = new int[number];
@@ -41,9 +39,7 @@ public class fourthTask {
 
 
 
-        int indexForEven = 0;
-        int indexForUneven = 0;
-
+        // A loop that prints all numbers in the order they are created and also calculate if they are even or uneven
         for(int i = 0; i < number; i++){
             numberArray[i] = getRandomNumber();
         }
@@ -52,33 +48,20 @@ public class fourthTask {
         for(int i = 0; i < numberArray.length; i++){
              System.out.print(numberArray[i] + " ");
 
-
             if(numberArray[i] % 2 == 0){
-              //  System.out.println(numberArray[i] + " är jämn ");
                 tempArray[indexForEven] = numberArray[i];
-               // System.out.println(Arrays.toString(tempArray) + "Så ser array ut nu för jämna ");
-              //  System.out.println(tempArray[i] + " Är på temp array platsen");
                 indexForEven++;
 
             } else {
-               // System.out.println(numberArray[i] + " är oojämn ");
                 tempArray[(number-1) -indexForUneven]  = numberArray[i];
-               // System.out.println(Arrays.toString(tempArray) + "Så ser array ut nu ");
                 indexForUneven++;
             }
         }
 
 
-        //System.out.println("\nThe total number of even numbers are " + indexForEven);
-
-     //   for(int i = 0; i < indexForEven; i++){
-            // print only the even numbers
-    //        System.out.print(tempArray[i] + " ");
-     //   }
-       // System.out.println(Arrays.toString(tempArray));
         Arrays.sort(tempArray, 0, indexForEven); // sort the even numbers in ascending order
         Arrays.sort(tempArray, indexForEven+1, tempArray.length); // sort the even numbers in ascending order
-      //  System.out.println(Arrays.toString(tempArray));
+
 
         // first I print the even numbers
         System.out.println("\nHär är de slumpade talen ordnade:");
