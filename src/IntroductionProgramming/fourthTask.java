@@ -1,5 +1,6 @@
 package IntroductionProgramming;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -13,17 +14,15 @@ public class fourthTask {
         int[] tempArray = new int[0];
         int indexForEven = 0;
         int indexForUneven = 0;
+        int number = 0;
 
         System.out.println("Hur många slumptal i intervallet 0 - 999 önskas?");
 
 
         // Get the input from the user, only a int will work
         Scanner scan = new Scanner(System.in);
-        while (!scan.hasNextBigInteger()) {
-            System.out.println("Input is not a number.");
-            scan.nextLine();
-        }
-        int number = scan.nextInt();
+
+        number = getValue(scan);
 
         // Checking if it is to many numbers
         try
@@ -59,8 +58,11 @@ public class fourthTask {
         }
 
 
+
         Arrays.sort(tempArray, 0, indexForEven); // sort the even numbers in ascending order
-        Arrays.sort(tempArray, indexForEven+1, tempArray.length); // sort the even numbers in ascending order
+        Arrays.sort(tempArray, indexForEven, tempArray.length); // sort the even numbers in ascending order
+
+
 
 
         // first I print the even numbers
@@ -89,6 +91,29 @@ public class fourthTask {
     public static int getRandomNumber(){
         Random randomObj = new Random();
         return randomObj.nextInt(999) + 1;
+    }
+
+
+    public static int getValue(Scanner scan){
+        boolean goodValue = false;
+        int number = 0;
+        while (goodValue != true){
+            while (!scan.hasNextBigInteger() ) {
+                System.out.println("Input var ingen siffra, skriv in ett nytt värde");
+                scan.nextLine();
+            }
+            number = scan.nextInt();
+            if (number > 0){
+                goodValue = true;
+            } else {
+                System.out.println("Värdet var noll eller negativt, skriv in ett nytt värde");
+                scan.nextLine();
+            }
+
+        }
+
+        return number;
+
     }
 
 }
