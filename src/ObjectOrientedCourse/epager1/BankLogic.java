@@ -134,6 +134,16 @@ public class BankLogic {
         return null;
     }
 
+
+    public ArrayList<String> getAllAccountIds(String pNo){
+        Customer customer = findCustomer(pNo);
+        if ( customer != null ){
+             return customer.getStringAccountListIds();
+
+        }
+        return null;
+    }
+
     /**
      * Gör att man kan ta ut pengar från kontot med matchande accountId
      * @param String pNo, int accountId, int amount
@@ -190,7 +200,7 @@ public class BankLogic {
     private Customer findCustomer(String pNo){
         Customer foundCustomer = null;
         for(Customer customer: customersList){
-            if(customer.getPersonalNumber() == pNo){
+            if(customer.getPersonalNumber().equals(pNo) ){
                 foundCustomer = customer;
                 break;
             }
@@ -232,6 +242,14 @@ public class BankLogic {
         }
 
         return null;
+    }
+
+    public static void main(String[] args){
+        BankLogic testar = new BankLogic();
+        testar.createCustomer("Per", "Granberg", "199409198299");
+        System.out.println(testar.getAllCustomers());
+        testar.createCreditAccount("199409198299");
+        System.out.println(testar.getCustomer("199409198299"));
     }
 
 

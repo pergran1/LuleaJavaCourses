@@ -2,6 +2,7 @@ package IntroductionProgramming;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -102,12 +103,20 @@ public class fourthTask {
                 System.out.println("Input var ingen siffra, skriv in ett nytt värde");
                 scan.nextLine();
             }
-            number = scan.nextInt();
-            if (number > 0){
-                goodValue = true;
-            } else {
-                System.out.println("Värdet var noll eller negativt, skriv in ett nytt värde");
+            try{
+                number = scan.nextInt();
+
+                if (number > 0){
+                    goodValue = true;
+                } else {
+                    System.out.println("Värdet var noll eller negativt, skriv in ett nytt värde");
+                    scan.nextLine();
+                }
+
+            }catch (InputMismatchException im){
+                System.out.println("Du skrev ett för stort number, försök igen");
                 scan.nextLine();
+
             }
 
         }

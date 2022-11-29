@@ -70,6 +70,18 @@ public class Customer {
     }
 
 
+    /**
+     * Ny metod för GUI som endast kommer ge alla account ids
+     */
+    public ArrayList<String> getStringAccountListIds(){
+        ArrayList<String> strList = new ArrayList<String>();
+        for (Account account: accountList){
+            strList.add(String.valueOf(account.getAccountNumber()));
+        }
+        return strList;
+    }
+
+
 
     /**
      * Metod som gör en bra utskrift när man stänger konton
