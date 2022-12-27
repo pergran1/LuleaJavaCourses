@@ -11,41 +11,70 @@ public class sixthTask {
     public static void main(String[] args){
         //menu();
 
-        int[][] matrix = {  { 3, 2, 1 },
-                { 9, 11, 5},
-                { 0, 0, 13 },
-                { 7, 21, 14 } };
-
         int[][] articlesMatrix = new int[10][3];
         int[][] sales = new int[10][3];
         Date[] dateTime = new Date[100];
 
-        //insertArticles(articlesMatrix, 2, 3);
-       // getNbrOfEmptyRows(matrix, 0);
-
-        //System.out.println(checkIfBiggerMatrix(matrix, 1,0));
-        //System.out.println(checkIfBiggerMatrix(matrix, 2,0));
-
-        // printMatrix(insertArticles(matrix, 4, 3));
-        //matrix = insertArticles(matrix, 4, 3);
-
-       // removeArticle(matrix);
-
-        printMatrix(bubbleSortMatrix(matrix));
-        System.out.println("Testar ny variant ");
-        printMatrix(sortMatrix(matrix));
+        int articleNumber = 1000;
+        int userInput;
+        int noOfArticles;
 
 
 
+        /**
+         * The main framework for the program. It is an endless while loop that repeatedly calls the menu on every iteration
+         * as each one will run one command from the user. It checks the input from the menu with that of its switch statement,
+         * checking if any of the 6 commands have been issued and then running them. After every entry, it repeats and waits
+         * for the next command, even if the user input wasn't a valid option of 1-6.
+         */
+        outerloop:
+        while(true)
+        {
+            System.out.println();
+            userInput = menu();
 
-       // printArticles(matrix);
+            switch (userInput)
+            {
+                case 1:
+                    System.out.println("Hur många artiklar vill du lägga till?");
+                    noOfArticles = input();
 
-       // sellArticle(sales, dateTime,  matrix);
-       // printMatrix(sales);
+                    while(noOfArticles <= 0) {
+                        System.out.println("Lägg till minst 1 artikel?");
+                        noOfArticles = input();
+                    }
 
+                    // add nbr of articles to add
+                    articlesMatrix = insertArticles(articlesMatrix, articleNumber, noOfArticles);
+                    articleNumber += noOfArticles;
+                    break;
 
+                case 2:
+                    removeArticle(articlesMatrix);
+                    break;
 
+                case 3:
+                    printArticles(articlesMatrix);
+                    break;
 
+                case 4:
+                    sellArticle(sales, dateTime, articlesMatrix);
+                    break;
+
+                case 5:
+                    printSales(sales, dateTime);
+                    break;
+
+                case 6:
+                    sortedTable(sales, dateTime);
+                    break;
+
+                case 7:
+                    System.out.println("Programmet avslutas");
+                    break outerloop;
+
+            }
+        }
 
     }
 
@@ -66,31 +95,22 @@ public class sixthTask {
 
     public static int input(){
         String in;
-        int ENDVALUE = -1;
-        int ENDNUMBER = 7;
 
-        //Keep going until q, ignore invalid values.
         while(true) {
-            //Check if it is integer,
             if(keyboard.hasNextInt()) {
                 return keyboard.nextInt();
             }
             else {
-                //Check if it is q
                 in = keyboard.next();
-                if (in.equals(ENDNUMBER))
-                    return ENDVALUE;
-                //Check if it is something else
-                // else {
-                //   System.out.println(in + " is not a valid integer ");
-                // }
+                System.out.println("Du skrev: " + in + " vilket inte är giltigt, försök igen och skriv en siffra!");
+                continue;
             }
         }
     }
 
     public static int[][] insertArticles (int[][]articles, int articleNumber, int noOfArticles) {
 
-        int insertedNumberArticles = 0;
+
         int[][] newMatrix = checkFull(articles, noOfArticles);
 
 
@@ -98,28 +118,20 @@ public class sixthTask {
             {
                //System.out.println(" i är: " + Arrays.toString(articles[i]));
                 // length returns number of rows
-                if(newMatrix[i][0] == 0){
+                if(newMatrix[i][0] == 0 && noOfArticles != 0){
                     //insert values into this row
                     newMatrix[i][0] = articleNumber;
                     newMatrix[i][1] = getNbrArticles();
                     newMatrix[i][2] = getPrice();
-                    insertedNumberArticles++;
-                    System.out.println("Matrix:");
-                    printMatrix(newMatrix);
+                    articleNumber++;
+                    noOfArticles--;
 
-
-                    if (insertedNumberArticles == noOfArticles){
-                        //dont insert any more
-                        return newMatrix;
-                    }
 
 
                 }
             }
-        System.out.println("Nu är de slut");
+
         return newMatrix;
-
-
     }
 
     public static int getPrice(){
@@ -149,13 +161,11 @@ public class sixthTask {
     }
 
     public static boolean checkIfBiggerMatrix(int[][]matrix, int newRowsNeeded, int lookFor){
-       // System.out.println("Rows needed are " + newRowsNeeded );
-        int matrixLength = matrix.length;
-        //System.out.println(matrixLength);
-        int emptyRows = getNbrOfEmptyRows(matrix, lookFor);
-       // System.out.println("Emptuy rows are : " + emptyRows);
 
-        return (emptyRows - newRowsNeeded ) <= 0;
+        int matrixLength = matrix.length;
+        int emptyRows = getNbrOfEmptyRows(matrix, lookFor);
+
+        return (emptyRows - newRowsNeeded ) < 0;
     }
 
     public static int[][] checkFull(int[][]articles, int noOfArticles){
@@ -188,8 +198,6 @@ public class sixthTask {
         // loop matrix to find article
         for (int i = 0; i < articles.length ; i++)
         {
-            //System.out.println(" i är: " + Arrays.toString(articles[i]));
-            // length returns number of rows
             if(articles[i][0] == getArticleToRemove){
                 //insert values into this row
                 articles[i][0] = 0;
@@ -200,83 +208,53 @@ public class sixthTask {
         }
     }
 
-    public  static void printMatrix(int mat[][]){
-        for (int[] row : mat)
-            System.out.println(Arrays.toString(row));
-    }
-
-
-    public static int[][] bubbleSortMatrix(int[][] arr) {
-        int arrayLength = arr.length;
-        for (int i = 0; i < arrayLength; i++) {
-            for (int j = 1; j < (arrayLength - i); j++) {
-                int nameTemp, scoreTemp;
-                int leftValue, rightValue;
-                leftValue = Integer.valueOf(arr[j - 1][1]);
-                rightValue = Integer.valueOf(arr[j][1]);
-                if (leftValue > rightValue) {
-                    //swap elements
-                    nameTemp = arr[j - 1][0];
-                    scoreTemp = arr[j - 1][1];
-                    arr[j - 1][0] = arr[j][0];
-                    arr[j - 1][1] = arr[j][1];
-                    arr[j][0] = nameTemp;
-                    arr[j][1] = scoreTemp;
-                }
-
-            }
-        }
-
-        return arr;
-    }
-
-
-    private static int[][] sortMatrix(int[][] matrix) {
-        int row = matrix.length;
-        int col = matrix[0].length;
-        int totalCount = row * col;
-
-        System.out.println("totalCount : " +totalCount);
-
-        boolean noSwaps = false;
-        for(int i = 0; !noSwaps; i++) {
-            noSwaps = true;
-
-            for(int j = 1; j < totalCount - i; j++) {
-                int currentRow = (j-1) / col;
-                int currentOffset = (j-1) % col;
-                int nextRow = j / col;
-                int nextOffset = j % col;
-
-                if( matrix[currentRow][currentOffset] > matrix[nextRow][nextOffset]) {
-                    //swapping
-                    int temp = matrix[nextRow][nextOffset];
-                    matrix[nextRow][nextOffset] = matrix[currentRow][currentOffset];
-                    matrix[currentRow][currentOffset] = temp;
-
-                    noSwaps = false;
-                }
-            }
-        }
-        return matrix;
-    }
 
 
     public static void printArticles (int[][]articles){
-        articles = bubbleSortMatrix(articles);
+        int[] firstColumn  = new int[articles.length];
+        for (int i = 0; i < firstColumn.length ; i++){
+            firstColumn[i] = articles[i][0];
 
-        for (int i = 0; i < articles.length ; i++)
-        {
-            //System.out.println(" i är: " + Arrays.toString(articles[i]));
-            // length returns number of rows
-            if(articles[i][0] != 0){
-                //insert values into this row
-                System.out.println("Artikelnummer: " + articles[i][0] + " Antal: " + articles[i][1] + " Pris: " + articles[i][2]);
+        }
+         //sort the article
+        bubbleSort(firstColumn);
+
+        for (int j = 0; j < firstColumn.length ; j++){
+            if(firstColumn[j] == 0){
+                continue;
+            } else {
+                for (int i = 0; i < articles.length ; i++)
+                {
+                    //System.out.println(" i är: " + Arrays.toString(articles[i]));
+                    // length returns number of rows
+                    if(articles[i][0] == firstColumn[j] ){
+                        //insert values into this row
+                        System.out.println("Artikelnummer: " + articles[i][0] + " Antal: " + articles[i][1] + " Pris: " + articles[i][2]);
+                    }
+            }
+
             }
         }
 
 
     }
+
+
+    private static void bubbleSort(int arr[]) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++)
+            for (int j = 0; j < n - i - 1; j++)
+                if (arr[j] > arr[j + 1]) {
+                    // swap temp and arr[i]
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+    }
+
+
+
+
 
 
     public static void sellArticle(int[][]sales, Date[] salesDate, int[][]articles){
@@ -285,15 +263,23 @@ public class sixthTask {
         System.out.println("Skriv hur många enheter du vill köpa: ");
         int getNbrOfProducts = input();
 
+        while(getNbrOfProducts < 1)
+        {
+            System.out.println("Invalid input. Please enter an integer number that is above 0.");
+            getNbrOfProducts = input();
+        }
+
         for (int i = 0; i < articles.length ; i++)
         {
             //System.out.println(" i är: " + Arrays.toString(articles[i]));
             // length returns number of rows
             if(articles[i][0] == getArticleNbr){
                 // Control if the number of articles in stock are enough
-                if (articles[i][1] >= getArticleNbr ){
+                System.out.println("Artikeln: " + articles[i][0] + " letar efter " + articles[i][1]  );
+                if (articles[i][1] >= getNbrOfProducts ){
                     // sale is confirmed
-                    articles[i][1] -= getArticleNbr;
+                    articles[i][1] -= getNbrOfProducts;
+                    System.out.println("Artikeln: " + articles[i][0] + " gjorde en försäljning " + articles[i][1]  );
 
                     // loop through sales to find next index
                     for (int k = 0; k < sales.length; k++)
@@ -305,6 +291,7 @@ public class sixthTask {
                             sales[k][2] = articles[i][2] * getNbrOfProducts;
 
                             salesDate[k] = new Date();
+
                             break;
                         }
                     }
@@ -318,10 +305,71 @@ public class sixthTask {
     }
 
 
+    public static void printSales ( int[][] sales, Date[] salesDate)
+    {
+        System.out.println("Date/Time                           Article Number   Amount Sold   Sum");
+        for (int i = 0; i < sales.length; i++)
+        {
+
+            if (sales[i][0] != 0)
+            {
+                System.out.println(salesDate[i].toString() + "       " + sales[i][0] + "             " + sales[i][1] + "             " + sales[i][2]);
+            }
+        }
+    }
 
 
 
 
+    public static void sortedTable(int[][]sales,  Date[] salesDate){
+        // kombinera sales med salesDate
+        // eftersom man inte måste sortera på tid så räcker det kanske att bara printa
+        int[] firstColumn  = new int[sales.length];
+        for (int i = 0; i < firstColumn.length ; i++){
+            firstColumn[i] = sales[i][0];
+
+        }
+        //sort the article
+        bubbleSort(firstColumn);
+        firstColumn = returnNonRepeated(firstColumn);
+
+        for (int j = 0; j < firstColumn.length ; j++){
+            if(firstColumn[j] == 0){
+                continue;
+            } else {
+                for (int i = 0; i < sales.length ; i++)
+                {
+
+                    if(sales[i][0] == firstColumn[j] ){
+                        //insert values into this row
+                        System.out.println("Artikelnummer: " + sales[i][0] + " Pris: " + sales[i][2] + " Datum: " + salesDate[i]);
+                    }
+                }
+
+            }
+        }
+
+    }
+
+
+    public static int[] returnNonRepeated(int[] arr) {
+
+        int[] temp = new int[arr.length];
+        int numbersCount = 1;
+        for (int i = 0; i < arr.length; i++) {
+            if (i == 0) {
+                temp[numbersCount] = arr[i];
+                numbersCount++;
+            } else {
+                if (arr[i] != arr[i - 1]) {
+                    temp[numbersCount] = arr[i];
+                    numbersCount++;
+                }
+            }
+        }
+
+        return temp;
+    }
 
 
 
