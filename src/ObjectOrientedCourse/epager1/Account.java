@@ -10,6 +10,7 @@
 
 package ObjectOrientedCourse.epager1;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public abstract class Account {
+public abstract class Account implements Serializable {
     protected BigDecimal balance;
     protected BigDecimal interest;
     protected int accountNumber;
@@ -25,7 +26,7 @@ public abstract class Account {
     protected String accountType;
     protected ArrayList<String> transactionList = new ArrayList<String>();
 
-    public Account() {
+    public Account()  {
         nbrOfAccounts++;
         this.balance = new BigDecimal("0.00");
         this.interest= new BigDecimal("0.012");
@@ -35,6 +36,10 @@ public abstract class Account {
 
     public int getAccountNumber(){
         return accountNumber;
+    }
+
+    public static void setNbrOfAccounts(int newNbrOfAccounts){
+        nbrOfAccounts= newNbrOfAccounts;
     }
 
     public BigDecimal getInterest(){
@@ -79,7 +84,7 @@ public abstract class Account {
 
     /**
      * Sparar information från varje transaktion
-     * @param int amount, BigDecimal balance, boolean convertToNegative
+     * @param  amount, BigDecimal balance, boolean convertToNegative
      */
     public void writeTransactions(int amount, BigDecimal balance, boolean convertToNegative){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

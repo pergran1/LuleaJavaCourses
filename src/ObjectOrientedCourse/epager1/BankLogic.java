@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
 
 public class BankLogic {
 
-    List<Customer> customersList = new ArrayList<Customer>();
+    static List<Customer> customersList = new ArrayList<Customer>();
+    static int lastAccountNbr = 1000;
 
     public BankLogic(){
 
@@ -51,6 +52,11 @@ public class BankLogic {
             return true;
         }
         return false;
+    }
+
+    public void setCustomerList(List<Customer> newCustomerList){
+        customersList = newCustomerList;
+
     }
 
     /**
@@ -96,6 +102,7 @@ public class BankLogic {
         Customer customer = findCustomer(pNo);
         if ( customer != null ){
             int accountNbr =  customer.createAccount();
+            setLastestAccountNbr(accountNbr);
             return accountNbr;
 
         }
@@ -106,11 +113,20 @@ public class BankLogic {
         Customer customer = findCustomer(pNo);
         if ( customer != null ){
             int accountNbr =  customer.createCreditAccount();
+            setLastestAccountNbr(accountNbr);
             return accountNbr;
 
         }
         return -1;
 
+    }
+
+    public void setLastestAccountNbr(int newaAcountNbr) {
+        lastAccountNbr = newaAcountNbr;
+    }
+
+    public int getLastestAccountNbr(){
+        return lastAccountNbr;
     }
 
     public ArrayList<String> getTransactions(String pNo, int accountId){
