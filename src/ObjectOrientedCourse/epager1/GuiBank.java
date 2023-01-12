@@ -1,3 +1,14 @@
+/**
+ * Denna klass samlar allt till en GUI
+ * Man kan göra alla saker som BankLogic kan göra
+ * Man kan även spara alla kunder och deras konton/transaktioner till en fil
+ * Man kan välja ett konto och spara dess transaktioner till en fil
+ * Man kan läsa in tidigare kunder till Banken
+ *
+ * @author Per Granberg, epager-1
+ */
+
+
 package ObjectOrientedCourse.epager1;
 
 import javax.swing.*;
@@ -17,13 +28,17 @@ public class GuiBank extends JFrame
 
 	private BankLogic bankLogic;
 	private JList personList;
-	private JList infoList; //shows information about customers
 	private JTextPane infoArea;
 	private JScrollPane scrollInfo;
 	private JScrollPane scrollCustomers;
 	private JTextField nameField;
 	private JTextField surnameField;
 	private JTextField personNbrField;
+
+	/**
+	 * All the "Listener" below are used to activate events
+	 * when the user does something, like click on "Add custoner"
+	 */
 
 	private class AddListener implements ActionListener
 	{
@@ -107,7 +122,7 @@ public class GuiBank extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			try {
-				saveAllCustomers();
+				writeCustomersToFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -119,7 +134,7 @@ public class GuiBank extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			try {
-				readAllCustomers();
+				inputAllCustomers();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -151,7 +166,6 @@ public class GuiBank extends JFrame
 
 
 
-	/* Inre klass som sköter det som ska hända om man väljer alternativet "Visa" */
 	private class ShowListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -165,8 +179,6 @@ public class GuiBank extends JFrame
 	}
 
 
-
-	/* Inre klass som sköter menyval "Exit" */
 	private class ExitListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -192,21 +204,18 @@ public class GuiBank extends JFrame
 		bankLogic = new BankLogic();
 
 
-		nameField = new JTextField();  //nameField.getText() för att få texten som finns i namnet
-		nameField.setBorder(BorderFactory.createTitledBorder("Namn"));
-		surnameField = new JTextField();  //nameField.getText() för att få texten som finns i namnet
-		surnameField.setBorder(BorderFactory.createTitledBorder("Efternamn"));
+		nameField = new JTextField();
+		nameField.setBorder(BorderFactory.createTitledBorder("Name"));
+		surnameField = new JTextField();
+		surnameField.setBorder(BorderFactory.createTitledBorder("Surname"));
 
 		personNbrField = new JTextField();
 
-		personNbrField.setBorder(BorderFactory.createTitledBorder("Personnummer"));
+		personNbrField.setBorder(BorderFactory.createTitledBorder("Personnumber"));
 		personList = new JList<Account>();
 		scrollCustomers = new JScrollPane(personList);
-		personList.setBorder(BorderFactory.createTitledBorder("Registrerade personer"));
+		personList.setBorder(BorderFactory.createTitledBorder("Bank Customers"));
 
-		infoList = new JList<Customer>();
-		infoList.setBorder(BorderFactory.createTitledBorder("Information om kunder"));
-		infoList.setBorder(BorderFactory.createTitledBorder("Information om kunder"));
 
 		infoArea = new JTextPane();
 		scrollInfo = new JScrollPane(infoArea);
@@ -220,12 +229,9 @@ public class GuiBank extends JFrame
 	{
 		setTitle("Java Bank");
 		setSize(1300,650);
-
 		setLocation(100,100);
-
-		setLayout(new GridLayout(1,2));  // vet inte vad denna gö
-
-		buildMenu(); // Skapa upp menyn
+		setLayout(new GridLayout(1,2));
+		buildMenu();
 
 
 
@@ -235,63 +241,51 @@ public class GuiBank extends JFrame
 		leftPanel.add(nameField);
 		leftPanel.add(surnameField);
 		leftPanel.add(personNbrField);
-		JButton addButton = new JButton("Lägg till Person och konto");
+		JButton addButton = new JButton("Create customer");
 		addButton.addActionListener(new AddListener());
 		leftPanel.add(addButton);
-		JButton showButton = new JButton("Visa vald kund och konto");
+		JButton showButton = new JButton("Customer info");
 		showButton.addActionListener(new ShowListener());
 		leftPanel.add(showButton);
 
 
-		// add buttons for creating saving och credit account
-		JButton createSavingAccButton = new JButton("Skapa ett saving account");
+		JButton createSavingAccButton = new JButton("Create SavingAcc");
 		createSavingAccButton.addActionListener(new SavingAccListner() ); //lägg till en createAccount
 		leftPanel.add(createSavingAccButton);
 
-		JButton createCreditAccButton = new JButton("Skapa credit account");
+		JButton createCreditAccButton = new JButton("Create CreditAcc");
 		createCreditAccButton.addActionListener(new CreditAccListner());
 		leftPanel.add(createCreditAccButton);
 
-		// Button for changing name
-		JButton changeNameButton = new JButton("Ändra Namn");
+		JButton changeNameButton = new JButton("Change Name");
 		changeNameButton.addActionListener(new changeNameListner());
 		leftPanel.add(changeNameButton);
 
 
-		// Button for deleting customer funkar
-		JButton deleteCustomerButton = new JButton("Ta bort kund");
+		JButton deleteCustomerButton = new JButton("Remove Customer");
 		deleteCustomerButton.addActionListener(new DeleteCustomer());
 		leftPanel.add(deleteCustomerButton);
 
-		// lägg till knapp för deposit och withdraw
-		JButton depositButton = new JButton("Sätt in pengar");
+		JButton depositButton = new JButton("Deposit");
 		depositButton.addActionListener(new DepositListener());
 		leftPanel.add(depositButton);
 
-		// lägg till knapp för deposit och withdraw
-		JButton withdrawButton = new JButton("Ta ut pengar");
+		JButton withdrawButton = new JButton("Withdraw");
 		withdrawButton.addActionListener(new withdrawListener());
 		leftPanel.add(withdrawButton);
 
-		// lägg till close account
-		JButton closeAccButton = new JButton("Ta bort konto");
+		JButton closeAccButton = new JButton("Remove Account");
 		closeAccButton.addActionListener(new closeAccListener());
 		leftPanel.add(closeAccButton );
 
-		// lägg till se transactions
-		JButton seeTransactions = new JButton("Titta på transaktioner");
+		JButton seeTransactions = new JButton("Info transactions");
 		seeTransactions.addActionListener(new transactionListener());
 		leftPanel.add(seeTransactions);
 
 
-
 		add(leftPanel);
-
 		add(scrollCustomers);
-
 		add(scrollInfo);
-
-
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
@@ -299,33 +293,36 @@ public class GuiBank extends JFrame
 	private void buildMenu()
 	{
 		JMenuBar menubar = new JMenuBar();
-		JMenu menu = new JMenu("Arkiv");
+		JMenu menu = new JMenu("Meny");
 		menubar.add(menu);
 
-		JMenuItem item = new JMenuItem("Visa alla kunders information");
+		JMenuItem item = new JMenuItem("Show information on all customers");
 		item.addActionListener(new showAllInfoListener());
 		menu.add(item);
 
-		item = new JMenuItem("Spara alla kunder till fil");
+		item = new JMenuItem("Save all customers to file");
 		item.addActionListener(new saveAllCustomersListener());
 		menu.add(item);
 
-		item = new JMenuItem("Läs in alla kunder");
+		item = new JMenuItem("Read all customers");
 		item.addActionListener(new readAllCustomersListner());
 		menu.add(item);
 
-		item = new JMenuItem("Skriv transaktioner till fil");
+		item = new JMenuItem("Save transactions to file");
 		item.addActionListener(new writeTransactionsToFileListner());
 		menu.add(item);
 
-		item = new JMenuItem("Avsluta");
+		item = new JMenuItem("Quit");
 		item.addActionListener(new ExitListener());
 		menu.add(item);
 
 		setJMenuBar(menubar);
 	}
 
-
+	/**
+	 * Adds a customer to the personList
+	 * checks if the inputs for customer is correct, no numbers in name and 12 numbers in personNbr
+	 */
 	private void add()
 	{
 		// control that the inputs are valid
@@ -345,6 +342,10 @@ public class GuiBank extends JFrame
 
 	}
 
+
+	/**
+	 * Creates the saving account for a customer
+	 */
 	private void createSavingAccount(){
 		String pNbr = getPersonNumber();
 		if (pNbr != null){
@@ -353,7 +354,9 @@ public class GuiBank extends JFrame
 
 	}
 
-
+	/**
+	 * Creates the credit account for a customer
+	 */
 	private void createCreditAccount(){
 		String pNbr = getPersonNumber();
 		if (pNbr != null){
@@ -363,14 +366,23 @@ public class GuiBank extends JFrame
 	}
 
 
+	/**
+	 * Deletes a customer
+	 */
 	private void deleteCustomer(){
 		String pNbr = getPersonNumber();
 		if (pNbr != null) {
-			infoArea.setText("Informationen om den raderade kunden är:\n" + bankLogic.deleteCustomer(pNbr));
+			infoArea.setText("Information about the deleted customer is:\n" + bankLogic.deleteCustomer(pNbr));
 			personList.setListData(bankLogic.getAllCustomers().toArray());
 		}
 
 	}
+
+	/**
+	 * Lets the user deposit money for a selected customer
+	 * If controls if a user is selected, control if the user have any account
+	 *  Controls if the user write a letter when depositing
+	 */
 
 	private void deposit(){
 		String pNbr = getPersonNumber();
@@ -381,30 +393,30 @@ public class GuiBank extends JFrame
 				JTextField depositField = new JTextField(5);
 
 				JPanel myPanel = new JPanel();
-				myPanel.add(new JLabel("Sätt in:"));
+				myPanel.add(new JLabel("Deposit amount:"));
 				myPanel.add(depositField);
 				myPanel.add(Box.createHorizontalStrut(15)); // a spacer
 
-				myPanel.add(new JLabel("Välj account:"));
+				myPanel.add(new JLabel("Choose account:"));
 				JComboBox jcb = new JComboBox(new Vector(accountsList));
 				myPanel.add(jcb);
 
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
-						"Sätt in pengar", JOptionPane.OK_CANCEL_OPTION);
+						"Deposit money", JOptionPane.OK_CANCEL_OPTION);
 				if (result == JOptionPane.OK_OPTION) {
 					int accountId =Integer.parseInt(jcb.getSelectedItem().toString());
 
-					if (correctAmount(depositField.getText(), "Skriv bara siffror när du sätter in pengar")){
+					if (correctAmount(depositField.getText(), "Just write numbers when entering the amount")){
 						boolean checkDeposit = bankLogic.deposit(pNbr,accountId,Integer.parseInt(depositField.getText()));
 
 						if (checkDeposit == false){
-							JOptionPane.showMessageDialog(null, "Kunde inte sätta in pengar");
+							JOptionPane.showMessageDialog(null, "Could not deposit money to the account");
 						}
 					}
 
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Kunden har inget konto, skapa först ett konto!");
+				JOptionPane.showMessageDialog(null, "The customer has no account, first create a account!");
 			}
 
 
@@ -415,8 +427,11 @@ public class GuiBank extends JFrame
 	}
 
 
+	/**
+	 * Lets the user withdraw money from a customer
+	 * Check if the customer have account, and no letters when entering the numbers
+	 */
 	private void withdraw(){
-		// lägg till en if sats som kontrollerar att kunden har något account
 		String pNbr = getPersonNumber();
 		if (pNbr != null){
 			ArrayList<String> accountsList = bankLogic.getAllAccountIds(pNbr);
@@ -425,23 +440,23 @@ public class GuiBank extends JFrame
 				JTextField depositField = new JTextField(5);
 
 				JPanel myPanel = new JPanel();
-				myPanel.add(new JLabel("Ta ut pengar:"));
+				myPanel.add(new JLabel("Withdraw amount:"));
 				myPanel.add(depositField);
 				myPanel.add(Box.createHorizontalStrut(15)); // a spacer
 
-				myPanel.add(new JLabel("Välj account:"));
+				myPanel.add(new JLabel("Choose account:"));
 				JComboBox jcb = new JComboBox(new Vector(accountsList));
 				myPanel.add(jcb);
 
 
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
-						"Ta ut pengar", JOptionPane.OK_CANCEL_OPTION);
+						"Withdraw money", JOptionPane.OK_CANCEL_OPTION);
 				if (result == JOptionPane.OK_OPTION) {
 						int accountId =Integer.parseInt(jcb.getSelectedItem().toString());
-						if (correctAmount(depositField.getText(), "Skriv bara siffror när du tar ut pengar")){
+						if (correctAmount(depositField.getText(), "Just write numbers when entering the amount")){
 							boolean withdrawSuccess =  bankLogic.withdraw(pNbr,accountId,Integer.parseInt(depositField.getText()));
 							if (withdrawSuccess == false) {
-								JOptionPane.showMessageDialog(null, "Kunde inte ta ut pengar från kontot!");
+								JOptionPane.showMessageDialog(null, "Could not withdraw money from the account");
 							}
 						}
 
@@ -449,7 +464,7 @@ public class GuiBank extends JFrame
 					}
 
 				} else{
-				JOptionPane.showMessageDialog(null, "Kunden har inget konto, skapa först ett konto!");
+				JOptionPane.showMessageDialog(null, "The customer has no account, first create a account!");
 			}
 
 
@@ -458,10 +473,11 @@ public class GuiBank extends JFrame
 
 	}
 
-
+	/**
+	 * Lets the user close a account for a customer
+	 * Information of the deleted account is shown in "Information area"
+	 */
 	private void closeAccount(){
-		// lägg till en if sats som kontrollerar att kunden har något account
-
 		String pNbr = getPersonNumber();
 		if (pNbr != null){
 			ArrayList<String> accountsList = bankLogic.getAllAccountIds(pNbr);
@@ -470,19 +486,19 @@ public class GuiBank extends JFrame
 			if (accountsList.size() >0){
 				JPanel myPanel = new JPanel();
 
-				myPanel.add(new JLabel("Välj konto att ta bort:"));
+				myPanel.add(new JLabel("Choose account to remove:"));
 				JComboBox jcb = new JComboBox(new Vector(accountsList));
 				myPanel.add(jcb);
 
 
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
-						"Ta bort konto", JOptionPane.OK_CANCEL_OPTION);
+						"Remove account", JOptionPane.OK_CANCEL_OPTION);
 				if (result == JOptionPane.OK_OPTION) {
 					int accountId =Integer.parseInt(jcb.getSelectedItem().toString());
-					infoArea.setText("Informationen om det raderade kontot är:\n" + bankLogic.closeAccount(pNbr, accountId));
+					infoArea.setText("Information of the deleted account is:\n" + bankLogic.closeAccount(pNbr, accountId));
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Kunden har inget konto, skapa först ett konto!");
+				JOptionPane.showMessageDialog(null, "The customer has no account, first create a account!");
 			}
 
 		}
@@ -490,23 +506,24 @@ public class GuiBank extends JFrame
 	}
 
 
+	/**
+	 * Lets the user change name and surname of a selected customer
+	 */
 	private void changeName(){
-
-
 		String pNbr = getPersonNumber();
 		if (pNbr != null){
 			JTextField nameField = new JTextField(5);
 			JTextField surNameField = new JTextField(5);
 
 			JPanel myPanel = new JPanel();
-			myPanel.add(new JLabel("Namn:"));
+			myPanel.add(new JLabel("Name:"));
 			myPanel.add(nameField );
 			myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-			myPanel.add(new JLabel("Efternamn:"));
+			myPanel.add(new JLabel("Surname:"));
 			myPanel.add(surNameField);
 
 			int result = JOptionPane.showConfirmDialog(null, myPanel,
-					"Ändra namn och efternamn", JOptionPane.OK_CANCEL_OPTION);
+					"Change Name and Surname", JOptionPane.OK_CANCEL_OPTION);
 			if (result == JOptionPane.OK_OPTION) {
 				// lägg till så att man kan kontrollera namnet
 				if (correctPersonInput(nameField.getText(), surNameField.getText(), pNbr) == true){
@@ -518,42 +535,40 @@ public class GuiBank extends JFrame
 			personList.setListData(bankLogic.getAllCustomers().toArray());
 		}
 
-
-
 	}
 
+
+	/**
+	 * Shows information of a selected customer
+	 */
 	private void showSelected() throws IOException {
 		int position = personList.getSelectedIndex();
 		if(position > -1)
 		{
 			String testar = personList.getSelectedValue().toString();
 			String answer = testar.split(" ")[0];
-			infoArea.setText("Informationen om valda personen är:\n" + bankLogic.getCustomer(answer).toString());
-
+			infoArea.setText("Information of the selected customer is:\n" + bankLogic.getCustomer(answer).toString());
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(null, "Du måste markera en person i listan!");
+			JOptionPane.showMessageDialog(null, "You must first select a customer from the list");
 		}
 	}
 
 
+	/**
+	 * Shows information of all customers
+	 */
 	private void showAllInfo()
 	{
 		infoArea.setText(bankLogic.getAllCustomers().toString());
 
 	}
 
-	private void saveAllCustomers() throws IOException {
-		writeCustomersToFile();
-	}
 
-	private void readAllCustomers() throws FileNotFoundException {
-		inputAllCustomers();
-	}
-
-
-
+	/**
+	 * Shows all transactions for a selected account
+	 */
 	private void seeTransactions()
 	{
 
@@ -564,56 +579,67 @@ public class GuiBank extends JFrame
 			if (accountsList.size() > 0 ){
 				JPanel myPanel = new JPanel();
 
-				myPanel.add(new JLabel("Välj konto att se transaktionerna för:"));
+				myPanel.add(new JLabel("Choose account to see all the transactions for:"));
 				JComboBox jcb = new JComboBox(new Vector(accountsList));
 				myPanel.add(jcb);
 
 
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
-						"Se transaktioner", JOptionPane.OK_CANCEL_OPTION);
+						"See transactions", JOptionPane.OK_CANCEL_OPTION);
 				if (result == JOptionPane.OK_OPTION) {
 					int accountId =Integer.parseInt(jcb.getSelectedItem().toString());
-					infoArea.setText("Kundens alla transaktioner för kontot är:\n " +bankLogic.getTransactions(pNbr, accountId).toString());
+					infoArea.setText("All transactions for the account is:\n " +bankLogic.getTransactions(pNbr, accountId).toString());
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Kunden har inget konto, skapa först ett konto!");
+				JOptionPane.showMessageDialog(null, "The customer has no account, first create a account!");
 			}
 
 		}
 
 	}
 
+
+	/**
+	 * Clear the textinput
+	 */
 	private void clear()
 	{
-		// makes the inputbox empty again
 		nameField.setText("");
 		surnameField.setText("");
 		personNbrField.setText("");
 	}
 
 
+
+	/**
+	 * Get the personNumber from a selected customer
+	 */
 	private String getPersonNumber(){
 		int position = personList.getSelectedIndex();
 		if(position > -1)
 		{
-			String testar = personList.getSelectedValue().toString();
-			String answer = testar.split(" ")[0];
+			String customerInfo = personList.getSelectedValue().toString();
+			String answer = customerInfo.split(" ")[0];
 			String personNbr = answer;
 			return personNbr;
 
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(null, "Du måste markera en person i listan!");
+			JOptionPane.showMessageDialog(null, "You must first select a customer from the list");
 			return null;
 		}
 	}
 
+
+	/**
+	 * Test if the input for name and personNbr are empty
+	 */
 	private boolean testEmptyInput(String name, String surName, String personNbr){
 
 		if (name.isEmpty() == true || surName.isEmpty() == true || personNbr.isEmpty() == true){
-			JOptionPane.showMessageDialog(null, "Du måste fylla i något i alla tre rutorna för" +
-					"namn, efternamn och personnummer\n Kunde inte skapa en kund, försök igen!");
+			JOptionPane.showMessageDialog(null, "You must first write something in all three boxes " +
+					"Name, Surname and Personnumber\n Could not create a customer, try again!");
 			return false;
 		} else {
 			return true;
@@ -621,7 +647,9 @@ public class GuiBank extends JFrame
 
 	}
 
-	// Control input for name and so
+	/**
+	 * Controls if the name and personNbr have correct format
+	 */
 	private boolean correctPersonInput(String name, String surName, String personNbr){
 
 		if (personNbr.matches("[0-9]+") && personNbr.length() == 10){
@@ -631,15 +659,19 @@ public class GuiBank extends JFrame
 				return true;
 
 			} else {
-				JOptionPane.showMessageDialog(null, "Det finns en siffra i namnet eller efternamnet, skriv in igen");
+				JOptionPane.showMessageDialog(null, "The is a number in the Name or Surname, try again");
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(null, "Personnumret har fel format, du måste ange ÅÅMMDDXXXX");
+			JOptionPane.showMessageDialog(null, "Personnumber have wrong format, you must write ÅÅMMDDXXXX");
 		}
 		return false;
 	}
 
+
+	/**
+	 * Controls that the amount only contains numbers
+	 */
 	private boolean correctAmount(String amount, String outputMessage){
 		if (amount.matches("[0-9]+")){
 			return true;
@@ -651,7 +683,10 @@ public class GuiBank extends JFrame
 
 
 
-
+	/**
+	 * Writes all the customers to a file, transaction and so on are also saved
+	 * It also saves the last accountNbr used in a different file so that when loading the data it will pick up
+	 */
 	private void writeCustomersToFile() throws IOException {
 		List<Customer> allCustomers = BankLogic.customersList;
 		try
@@ -671,6 +706,11 @@ public class GuiBank extends JFrame
 		wr.close();
 	}
 
+
+
+	/**
+	 * Reads all the customers from a file to the bank,also sets the new accountNbr
+	 */
 	private void inputAllCustomers() throws FileNotFoundException {
 		List<Customer> namesList = new ArrayList<Customer>();
 
@@ -702,6 +742,11 @@ public class GuiBank extends JFrame
 
 	}
 
+
+
+	/**
+	 * The user will select a customer and save all transactions from one account into a txt file
+	 */
 	private void writeTransactionsToFile() throws IOException {
 		List<Customer> allCustomers = BankLogic.customersList;
 		String pNbr = getPersonNumber();
@@ -712,13 +757,13 @@ public class GuiBank extends JFrame
 			if (accountsList.size() > 0 ){
 				JPanel myPanel = new JPanel();
 
-				myPanel.add(new JLabel("Välj konto att spara transaktioner för:"));
+				myPanel.add(new JLabel("Select account to see transactions for:"));
 				JComboBox jcb = new JComboBox(new Vector(accountsList));
 				myPanel.add(jcb);
 
 
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
-						"Spara transaktioner", JOptionPane.OK_CANCEL_OPTION);
+						"Save transactions", JOptionPane.OK_CANCEL_OPTION);
 				if (result == JOptionPane.OK_OPTION) {
 					int accountId =Integer.parseInt(jcb.getSelectedItem().toString());
 
@@ -733,7 +778,7 @@ public class GuiBank extends JFrame
 
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Kunden har inget konto, skapa först ett konto!");
+				JOptionPane.showMessageDialog(null, "The customer has no account, first create a account!");
 			}
 
 		}

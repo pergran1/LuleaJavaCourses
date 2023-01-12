@@ -260,13 +260,6 @@ public class BankLogic {
         return null;
     }
 
-    public static void main(String[] args){
-        BankLogic testar = new BankLogic();
-        testar.createCustomer("Per", "Granberg", "199409198299");
-        System.out.println(testar.getAllCustomers());
-        testar.createCreditAccount("199409198299");
-        System.out.println(testar.getCustomer("199409198299"));
-    }
 
 
 }
