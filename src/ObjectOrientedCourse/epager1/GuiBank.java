@@ -691,7 +691,7 @@ public class GuiBank extends JFrame
 		List<Customer> allCustomers = BankLogic.customersList;
 		try
 		{
-			FileOutputStream fos = new FileOutputStream("customerData.txt");
+			FileOutputStream fos = new FileOutputStream("epager1_files/customerData.txt");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(allCustomers);
 			oos.close();
@@ -701,7 +701,7 @@ public class GuiBank extends JFrame
 		}
 
 		//  save the last accountNUmber to a file
-		Writer wr = new FileWriter("save_last_accountNumber.txt");
+		Writer wr = new FileWriter("epager1_files/save_last_accountNumber.txt");
 		wr.write (bankLogic.getLastestAccountNbr() + "");
 		wr.close();
 	}
@@ -716,7 +716,7 @@ public class GuiBank extends JFrame
 
 		try
 		{
-			FileInputStream fis = new FileInputStream("customerData.txt");
+			FileInputStream fis = new FileInputStream("epager1_files/customerData.txt");
 			ObjectInputStream ois = new ObjectInputStream(fis);
 
 			namesList = (ArrayList) ois.readObject();
@@ -736,7 +736,7 @@ public class GuiBank extends JFrame
 		personList.setListData(bankLogic.getAllCustomers().toArray());
 
 		// Change the latest accountnumber
-		Scanner scanner = new Scanner(new File("save_last_accountNumber.txt"));
+		Scanner scanner = new Scanner(new File("epager1_files/save_last_accountNumber.txt"));
 		int updateAccountNbr = scanner.nextInt();
 		Account.setNbrOfAccounts(updateAccountNbr);
 
@@ -769,7 +769,7 @@ public class GuiBank extends JFrame
 
 
 					// save the transacions to a file
-					FileWriter writer = new FileWriter("transactions_for_"+ accountId + ".txt");
+					FileWriter writer = new FileWriter("epager1_files/transactions_for_" + accountId + ".txt");
 					ArrayList<String> transactionList = bankLogic.getTransactions(pNbr, accountId);
 					for(String str: transactionList) {
 						writer.write(str + System.lineSeparator());
